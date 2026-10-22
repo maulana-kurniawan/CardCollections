@@ -15,6 +15,7 @@ Aplikasi manajemen dan pemindai barcode kartu fisik untuk game arcade **Animal K
   - *Silver Rare:* Chrome Metallic
   - *Gold Rare:* Sparkle Gold
   - *Ultra Rare:* **Gradien Biru, Ungu, dan Merah**
+  - *Kaiser Rare:* **Gradasi Emas, Silver, dan Abu Metalik**
 - **Layout Kartu Vertikal:** Proporsi kartu TCG arcade vertikal yang presisi (rasio ~1:1.4).
 - **Kamera Scanner Real-time:** Memindai barcode kartu langsung dari webcam PC atau browser smartphone via WiFi (`http://<IP_PC>:5000`).
 - **Koneksi Otomatis ke Play! Emulator:** Menembakkan barcode langsung ke port HTTP `9876/sys147/barcode`.

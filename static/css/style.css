@@ -929,6 +929,28 @@ body {
     100% { filter: hue-rotate(15deg) brightness(1.15); }
 }
 
+/* 6. KHUSUS KAISER RARE: Emas Gradasi Silver / Abu */
+.rarity-kaiser-rare {
+    background: linear-gradient(135deg, #d97706 0%, #facc15 25%, #ffffff 50%, #cbd5e1 75%, #64748b 100%) !important;
+    color: #0f172a !important;
+    font-weight: 900 !important;
+    border: 1px solid rgba(254, 240, 138, 0.9) !important;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 14px rgba(250, 204, 21, 0.65), 0 0 6px rgba(148, 163, 184, 0.7);
+    animation: kaiserGleam 3s infinite alternate ease-in-out;
+}
+
+@keyframes kaiserGleam {
+    0% {
+        box-shadow: 0 0 10px rgba(250, 204, 21, 0.5), 0 0 4px rgba(203, 213, 225, 0.5);
+        filter: brightness(1);
+    }
+    100% {
+        box-shadow: 0 0 16px rgba(250, 204, 21, 0.8), 0 0 8px rgba(226, 232, 240, 0.9);
+        filter: brightness(1.12);
+    }
+}
+
 /* Card Content Details */
 .tcg-card-content {
     padding-top: 1rem;

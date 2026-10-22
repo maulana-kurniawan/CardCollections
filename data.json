@@ -2,7 +2,7 @@
     {
         "id": 1,
         "nama": "Master Apollo",
-        "rarity": "Gold",
+        "rarity": "Ultra Rare",
         "type": "Animal",
         "barcode": "bn0xuwC\\",
         "gambar": "116d28d9-2564-4b75-bc04-168106805e03.jpg"
@@ -10,15 +10,15 @@
     {
         "id": 2,
         "nama": "Kaiser Fighters",
-        "rarity": "Gold",
+        "rarity": "Gold Rare",
         "type": "Strong",
         "barcode": "bn44e[it",
         "gambar": "04071c87-f041-475c-98c7-55c5c9910eb5.jpg"
     },
     {
         "id": 3,
-        "nama": "Alien Egg Gold",
-        "rarity": "Gold",
+        "nama": "Alien Egg Gold Rare",
+        "rarity": "Gold Rare",
         "type": "Miracle",
         "barcode": "bn60^~Ew",
         "gambar": "4a289404-d76d-476d-9f8e-6f734e15cf79.jpg"
@@ -26,7 +26,7 @@
     {
         "id": 4,
         "nama": "Mecha Fighters",
-        "rarity": "Silver",
+        "rarity": "Silver Rare",
         "type": "Strong",
         "barcode": "bn.}*{po",
         "gambar": "84f73905-680e-4382-b63f-4b86f4d09438.jpg"
@@ -34,7 +34,7 @@
     {
         "id": 5,
         "nama": "Black Hole",
-        "rarity": "Silver",
+        "rarity": "Silver Rare",
         "type": "Miracle",
         "barcode": "bn60^@K-",
         "gambar": "e2f6bb62-4d77-46d7-a587-6501d3f4b5e6.jpg"
@@ -42,7 +42,7 @@
     {
         "id": 6,
         "nama": "Death Scorch",
-        "rarity": "Gold",
+        "rarity": "Ultra Rare",
         "type": "Animal",
         "barcode": "bn5PUX}n",
         "gambar": "8dc9308a-ad0b-48ef-81a4-b1bf608fac0e.jpg"
@@ -50,7 +50,7 @@
     {
         "id": 7,
         "nama": "Brutus",
-        "rarity": "Gold",
+        "rarity": "Ultra Rare",
         "type": "Animal",
         "barcode": "bn60Rw;{",
         "gambar": "1a1c53c2-d61e-4136-ac3b-946c973c29d4.jpg"
@@ -58,7 +58,7 @@
     {
         "id": 8,
         "nama": "Forbidden Power",
-        "rarity": "Gold",
+        "rarity": "Gold Rare",
         "type": "Strong",
         "barcode": "bn6lSz9C",
         "gambar": "613ab579-8ece-4cd8-b49c-f5231866342c.jpg"
@@ -66,7 +66,7 @@
     {
         "id": 9,
         "nama": "Swift Blow",
-        "rarity": "Silver",
+        "rarity": "Silver Rare",
         "type": "Strong",
         "barcode": "bn2tl{*x",
         "gambar": "05184f57-6c86-4145-85d5-7b4b8ddd0a38.jpg"
@@ -74,7 +74,7 @@
     {
         "id": 10,
         "nama": "Armageddon Vertus",
-        "rarity": "Gold",
+        "rarity": "Ultra Rare",
         "type": "Animal",
         "barcode": "bn/\\~wZY",
         "gambar": "87977371-da74-4c29-ae36-b091b41e01bd.jpg"
@@ -82,7 +82,7 @@
     {
         "id": 11,
         "nama": "Emperor Vertus",
-        "rarity": "Gold",
+        "rarity": "Ultra Rare",
         "type": "Animal",
         "barcode": "bn0<z9~H",
         "gambar": "303d4370-03dd-45a1-ae0c-81de7d682800.jpg"
@@ -90,7 +90,7 @@
     {
         "id": 12,
         "nama": "Kaiser Coral",
-        "rarity": "Gold",
+        "rarity": "Ultra Rare",
         "type": "Animal",
         "barcode": "bn4pZxTm",
         "gambar": "3c25849b-5480-48b2-b788-a7a480025222.jpg"
@@ -98,7 +98,7 @@
     {
         "id": 13,
         "nama": "Ninja Trained Siegfried",
-        "rarity": "Gold",
+        "rarity": "Ultra Rare",
         "type": "Animal",
         "barcode": "bn5PV:x\\",
         "gambar": "f11f671c-2f55-4552-82a0-e592bb4defc6.jpg"
@@ -106,7 +106,7 @@
     {
         "id": 14,
         "nama": "Zangetsu",
-        "rarity": "Gold",
+        "rarity": "Ultra Rare",
         "type": "Animal",
         "barcode": "bn3Tcxkj",
         "gambar": "eb614b84-ca34-45db-ace3-55473614a8e3.jpg"
@@ -114,7 +114,7 @@
     {
         "id": 15,
         "nama": "Ninja Fighters",
-        "rarity": "Silver",
+        "rarity": "Silver Rare",
         "type": "Strong",
         "barcode": "bn3Ti>Gz",
         "gambar": "10b9341c-cd6e-4bf6-8db5-3ecfe9a789ea.jpg"
@@ -122,7 +122,7 @@
     {
         "id": 16,
         "nama": "Master and Pupil",
-        "rarity": "Silver",
+        "rarity": "Silver Rare",
         "type": "Strong",
         "barcode": "bn0xz=}a",
         "gambar": "c3036de0-ad0b-400d-a536-0ac9f8d945e3.jpg"
@@ -130,7 +130,7 @@
     {
         "id": 17,
         "nama": "Saturn Saw",
-        "rarity": "Silver",
+        "rarity": "Silver Rare",
         "type": "Miracle",
         "barcode": "bn1X}@qG",
         "gambar": "0272ad4d-3b4d-4cfa-bf6f-0c60af2fca26.jpg"
@@ -138,7 +138,7 @@
     {
         "id": 18,
         "nama": "Approaching Sun",
-        "rarity": "Silver",
+        "rarity": "Silver Rare",
         "type": "Miracle",
         "barcode": "bn0y$_P3",
         "gambar": "cf412554-4a67-4883-9793-06aaecee3a80.jpg"
@@ -146,15 +146,15 @@
     {
         "id": 19,
         "nama": "Alien Vault",
-        "rarity": "Gold",
+        "rarity": "Gold Rare",
         "type": "Miracle",
         "barcode": "bn0=)A+D",
         "gambar": "19557e70-ccc9-4a7d-808c-54d31b07187e.jpg"
     },
     {
         "id": 20,
-        "nama": "Alien Egg Gold",
-        "rarity": "Gold",
+        "nama": "Alien Egg Gold Rare",
+        "rarity": "Gold Rare",
         "type": "Miracle",
         "barcode": "bn0=(~.{",
         "gambar": "ed3060c2-0807-4834-aaa9-eefe74ea0796.jpg"
@@ -162,7 +162,7 @@
     {
         "id": 21,
         "nama": "Master Leo",
-        "rarity": "Ultra Rare",
+        "rarity": "Kaiser Rare",
         "type": "Animal",
         "barcode": "bn2tgYOh",
         "gambar": "128fa3d7-4b4b-4ec1-9c50-c189fedf20c8.jpg"
@@ -170,7 +170,7 @@
     {
         "id": 22,
         "nama": "Master and Pupil",
-        "rarity": "Silver",
+        "rarity": "Silver Rare",
         "type": "Strong",
         "barcode": "bn0=#=UF",
         "gambar": "1e46c442-68f0-4bd2-b588-3549e6451b86.jpg"
@@ -178,7 +178,7 @@
     {
         "id": 23,
         "nama": "Destructive Desire",
-        "rarity": "Gold",
+        "rarity": "Gold Rare",
         "type": "Strong",
         "barcode": "bn28r[b8",
         "gambar": "423f5990-8f2b-4864-a344-cef3418aae83.jpg"
@@ -186,7 +186,7 @@
     {
         "id": 24,
         "nama": "Mighty Fighter",
-        "rarity": "Silver",
+        "rarity": "Silver Rare",
         "type": "Strong",
         "barcode": "bn/]'\\42",
         "gambar": "933f31fa-f19a-4dee-a198-42af28cc4043.jpg"
@@ -194,7 +194,7 @@
     {
         "id": 25,
         "nama": "Great Comet",
-        "rarity": "Silver",
+        "rarity": "Silver Rare",
         "type": "Miracle",
         "barcode": "bn5Pb_(u",
         "gambar": "3d064036-0d4a-4743-b695-a1b2462016e2.jpg"
@@ -202,7 +202,7 @@
     {
         "id": 26,
         "nama": "Great Comet",
-        "rarity": "Silver",
+        "rarity": "Silver Rare",
         "type": "Miracle",
         "barcode": "bn6lZ_g/",
         "gambar": "4b59e497-957b-43ab-b998-ce8cfc91d77a.jpg"
@@ -210,7 +210,7 @@
     {
         "id": 27,
         "nama": "Victory Road",
-        "rarity": "Gold",
+        "rarity": "Gold Rare",
         "type": "Strong",
         "barcode": "bn4pa=/+",
         "gambar": "29fce908-6039-4d8f-89a8-4c7ca840b32c.jpg"
