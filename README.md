@@ -42,7 +42,7 @@ python app.py --no-gui
 
 Anda dapat mengompilasi seluruh *source code* ini menjadi satu berkas `CardCollections.exe` (seperti biner aslinya):
 
-1. Klik ganda berkas **`build_exe.bat`**
+1. Klik ganda berkas **`build.bat`**
 2. Skrip akan otomatis menginstal PyInstaller dan membangun aplikasi ke folder `dist/`
 3. Berkas eksekusi portabel akan berada di:
    ```text
