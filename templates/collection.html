@@ -80,9 +80,14 @@
                     <div class="tcg-card-content">
                         <h3 class="tcg-card-name" title="{{ card.nama }}">{{ card.nama }}</h3>
                         
-                        <div class="tcg-barcode-badge font-mono">
-                            <span class="noto-emoji">🏷️</span>
-                            <code>{{ card.barcode }}</code>
+                        <!-- Real Visual Barcode with Text Below -->
+                        <div class="tcg-barcode-strip">
+                            <div class="barcode-visual-wrapper">
+                                <svg class="barcode-svg" data-barcode="{{ card.barcode }}"></svg>
+                            </div>
+                            <div class="barcode-text-row">
+                                <code class="barcode-code-text font-mono">{{ card.barcode }}</code>
+                            </div>
                         </div>
 
                         <div class="tcg-actions">

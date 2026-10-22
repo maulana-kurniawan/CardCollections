@@ -1173,3 +1173,60 @@ body {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
 }
+
+/* ==========================================================================
+   REAL VISUAL 1D BARCODE STRIP (ARCADE STYLE)
+   ========================================================================== */
+.tcg-barcode-strip {
+    background: rgba(11, 13, 20, 0.7);
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: var(--m3-shape-md);
+    padding: 0.6rem 0.75rem 0.45rem;
+    margin-bottom: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    width: 100%;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.tcg-card:hover .tcg-barcode-strip {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+.barcode-visual-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.15rem 0;
+    overflow: hidden;
+}
+
+.barcode-svg {
+    max-width: 100%;
+    height: 38px;
+    display: block;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+.barcode-text-row {
+    width: 100%;
+    text-align: center;
+    padding-top: 0.15rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.barcode-code-text {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--md-sys-color-on-surface-variant);
+    background: transparent;
+    border: none;
+    padding: 0;
+}

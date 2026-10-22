@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCameraScanner();
     initDropzone();
     initManualBarcodeForm();
+    renderVisualBarcodes();
 });
 
 // Toast notification helper
@@ -282,5 +283,56 @@ function confirmDeleteCard(cardId, cardName) {
             .catch(err => {
                 showToast('Gagal menghapus kartu: ' + err, true);
             });
+    }
+}
+
+// 7. Render Real 1D Visual Barcodes via JsBarcode
+function renderVisualBarcodes() {
+    if (typeof JsBarcode === 'undefined') {
+        console.warn('JsBarcode library not loaded yet.');
+        return;
+    }
+    const elements = document.querySelectorAll('.barcode-svg');
+    elements.forEach(svg => {
+        const rawCode = svg.getAttribute('data-barcode');
+        if (!rawCode || !rawCode.trim()) return;
+
+        const code = rawCode.trim();
+        try {
+            JsBarcode(svg, code, {
+                format: "CODE128",
+                width: 1.45,
+                height: 38,
+                displayValue: false, // Text is rendered cleanly underneath
+                margin: 0,
+                background: "transparent",
+                lineColor: "#f8fafc",
+                valid: function (valid) {
+                    if (!valid) {
+                        fallbackBarcode(svg, code);
+                    }
+                }
+            });
+        } catch (err) {
+            fallbackBarcode(svg, code);
+        }
+    });
+}
+
+function fallbackBarcode(svg, code) {
+    try {
+        // Fallback: strip any non-standard symbols and render Code 128
+        const cleanCode = code.replace(/[^A-Za-z0-9\-\.\s]/g, '') || '1001-AK-001';
+        JsBarcode(svg, cleanCode, {
+            format: "CODE128",
+            width: 1.4,
+            height: 38,
+            displayValue: false,
+            margin: 0,
+            background: "transparent",
+            lineColor: "#f8fafc"
+        });
+    } catch (e) {
+        console.error('Failed to render barcode:', e);
     }
 }
