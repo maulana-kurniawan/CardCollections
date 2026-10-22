@@ -1,32 +1,36 @@
 @echo off
-title Build Card Collections Executable
-echo =======================================================
-echo Building Card Collections Standalone Executable (.exe)
-echo Author: maulana-kurniawan
-echo =======================================================
+title Build Card Collections EXE
+echo ========================================================
+echo   BUILD CARD COLLECTIONS STANDALONE EXE (by maulana-kurniawan)
+echo ========================================================
 
-where pyinstaller >nul 2>nul
+where python >nul 2>nul
 if %errorlevel% neq 0 (
-    echo PyInstaller not found. Installing PyInstaller...
-    python -m pip install pyinstaller
+    echo [ERROR] Python tidak terdeteksi di PATH!
+    pause
+    exit /b
 )
 
-echo.
-echo Compiling with PyInstaller...
-pyinstaller --noconfirm --onedir --windowed ^
-    --add-data "templates;templates" ^
-    --add-data "static;static" ^
-    --name "CardCollections" ^
-    app.py
+echo [1/3] Memastikan dependensi dan PyInstaller terpasang...
+python -m pip install -r requirements.txt --quiet
+python -m pip install pyinstaller --quiet
 
-if %errorlevel% equ 0 (
+echo [2/3] Mengompilasi CardCollections.exe dengan PyInstaller...
+pyinstaller --clean --noconfirm CardCollections.spec
+
+if exist dist\CardCollections.exe (
     echo.
-    echo =======================================================
-    echo BUILD SUCCESSFUL!
-    echo Output binary is in: dist\CardCollections\
-    echo =======================================================
+    echo [3/3] Berhasil mengompilasi CardCollections.exe!
+    echo ========================================================
+    echo Menyalin aset awal ke folder dist\...
+    xcopy /E /I /Y images dist\images >nul
+    copy /Y data.json dist\data.json >nul
+    echo.
+    echo SIAP! Berkas aplikasi mandiri ada di:
+    echo   d:\Card-Collections\dist\CardCollections.exe
+    echo ========================================================
 ) else (
-    echo.
-    echo [ERROR] Build failed. Please inspect the error messages above.
+    echo [ERROR] Gagal mengompilasi berkas EXE.
 )
+
 pause

@@ -11,23 +11,24 @@ if %errorlevel% neq 0 (
     exit /b
 )
 
-echo [1/3] Menginstal dependensi dan PyInstaller...
+echo [1/3] Memastikan dependensi dan PyInstaller terpasang...
 python -m pip install -r requirements.txt --quiet
 python -m pip install pyinstaller --quiet
 
-echo [2/3] Mengompilasi source code menjadi CardCollections.exe...
-pyinstaller --clean CardCollections.spec
+echo [2/3] Mengompilasi CardCollections.exe dengan PyInstaller...
+pyinstaller --clean --noconfirm CardCollections.spec
 
 if exist dist\CardCollections.exe (
-    echo [3/3] Berhasil mengompilasi!
+    echo.
+    echo [3/3] Berhasil mengompilasi CardCollections.exe!
     echo ========================================================
-    echo Berkas EXE tersedia di: dist\CardCollections.exe
-    echo Salin folder 'images' dan berkas 'data.json' ke folder 'dist\'
-    echo agar data kartu dapat langsung dibaca oleh program.
-    echo ========================================================
+    echo Menyalin aset awal ke folder dist\...
     xcopy /E /I /Y images dist\images >nul
     copy /Y data.json dist\data.json >nul
-    echo Folder dist\ siap dijalankan secara portabel!
+    echo.
+    echo SIAP! Berkas aplikasi mandiri ada di:
+    echo   d:\Card-Collections\dist\CardCollections.exe
+    echo ========================================================
 ) else (
     echo [ERROR] Gagal mengompilasi berkas EXE.
 )

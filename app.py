@@ -23,6 +23,18 @@ import threading
 
 from flask import Flask, render_template, request, redirect, url_for, jsonify, send_from_directory
 from PIL import Image
+# Fix Windows DLL search path for PyInstaller frozen bundle (pyzbar libiconv.dll & libzbar-64.dll)
+if sys.platform == 'win32':
+    frozen_base = getattr(sys, '_MEIPASS', os.path.dirname(sys.executable if getattr(sys, 'frozen', False) else os.path.abspath(__file__)))
+    pyzbar_dir = os.path.join(frozen_base, 'pyzbar')
+    for d in [frozen_base, pyzbar_dir]:
+        if os.path.exists(d):
+            try:
+                os.add_dll_directory(d)
+            except (AttributeError, OSError):
+                pass
+    os.environ['PATH'] = f"{pyzbar_dir};{frozen_base};" + os.environ.get('PATH', '')
+
 from pyzbar.pyzbar import decode
 import requests
 import webview
