@@ -308,7 +308,7 @@ def connect():
             return 'Server Play! Active'
         return f'Server Play! status: {response.status_code}'
     except Exception:
-        return 'I/O HTTP Server Play! not detected. '
+        return f'Barcode [{barcode}] terkirim ke antrean, tetapi I/O HTTP Server Play! offline.'
 
 
 @app.route('/upload', methods=['POST'])
@@ -340,6 +340,24 @@ def upload_file():
         print('Error in /upload:', e)
         return 'Internal Server Error: ' + str(e), 500
 
+
+
+@app.route('/scan-barcode-image', methods=['POST'])
+def scan_barcode_image():
+    """Decode barcode from uploaded image file and return extracted code as JSON."""
+    try:
+        if 'image' not in request.files:
+            return jsonify({'success': False, 'message': 'Tidak ada berkas gambar yang diunggah.'}), 400
+        image_file = request.files['image']
+        image = Image.open(image_file)
+        barcodes = decode(image)
+        if barcodes:
+            barcode_data = barcodes[0].data.decode('utf-8')
+            return jsonify({'success': True, 'barcode': barcode_data})
+        return jsonify({'success': False, 'message': 'Tidak ada barcode yang terdeteksi pada gambar.'})
+    except Exception as e:
+        print('Error in /scan-barcode-image:', e)
+        return jsonify({'success': False, 'message': f'Gagal memproses gambar: {str(e)}'}), 500
 
 @app.route('/send-barcode', methods=['POST'])
 def send_barcode():

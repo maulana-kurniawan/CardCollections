@@ -169,12 +169,19 @@
 
             <div class="m3-field">
                 <label for="addBarcode">Kode Barcode *</label>
-                <input type="text" id="addBarcode" name="barcode" class="m3-input font-mono" placeholder="Contoh: 1001-A-001" required>
+                <div class="m3-input-action-row">
+                    <input type="text" id="addBarcode" name="barcode" class="m3-input font-mono" placeholder="Contoh: 1001-A-001" required>
+                    <button type="button" class="m3-btn m3-btn-tonal btn-scan-img" onclick="document.getElementById('addBarcodeScanFile').click()" title="Scan barcode dari gambar">
+                        <span class="noto-emoji">📷</span> Scan Gambar
+                    </button>
+                    <input type="file" id="addBarcodeScanFile" accept="image/*" style="display:none;" onchange="scanBarcodeForInput(this, 'addBarcode')">
+                </div>
+                <span class="m3-helper-text">Ketik kode manual atau klik <strong>Scan Gambar</strong> untuk membaca otomatis dari foto barcode.</span>
             </div>
 
             <div class="m3-field">
                 <label for="addGambar">Foto Kartu Vertikal (Opsional)</label>
-                <input type="file" id="addGambar" name="gambar" class="m3-file-input" accept="image/*">
+                <input type="file" id="addGambar" name="gambar" class="m3-file-input" accept="image/*" onchange="autoScanFromCardPhoto(this, 'addBarcode')">
             </div>
 
             <div class="m3-dialog-actions">
@@ -215,12 +222,19 @@
 
             <div class="m3-field">
                 <label for="editBarcode">Kode Barcode *</label>
-                <input type="text" id="editBarcode" name="barcode" class="m3-input font-mono" required>
+                <div class="m3-input-action-row">
+                    <input type="text" id="editBarcode" name="barcode" class="m3-input font-mono" required>
+                    <button type="button" class="m3-btn m3-btn-tonal btn-scan-img" onclick="document.getElementById('editBarcodeScanFile').click()" title="Scan barcode dari gambar">
+                        <span class="noto-emoji">📷</span> Scan Gambar
+                    </button>
+                    <input type="file" id="editBarcodeScanFile" accept="image/*" style="display:none;" onchange="scanBarcodeForInput(this, 'editBarcode')">
+                </div>
+                <span class="m3-helper-text">Ketik kode manual atau klik <strong>Scan Gambar</strong> untuk membaca otomatis dari foto barcode.</span>
             </div>
 
             <div class="m3-field">
                 <label for="editGambar">Ganti Foto Kartu (Kosongkan jika tidak diganti)</label>
-                <input type="file" id="editGambar" name="gambar" class="m3-file-input" accept="image/*">
+                <input type="file" id="editGambar" name="gambar" class="m3-file-input" accept="image/*" onchange="autoScanFromCardPhoto(this, 'editBarcode')">
             </div>
 
             <div class="m3-dialog-actions">

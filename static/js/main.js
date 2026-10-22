@@ -8,15 +8,115 @@ document.addEventListener('DOMContentLoaded', () => {
     renderVisualBarcodes();
 });
 
-// Toast notification helper
-function showToast(message, isError = false) {
+// Global Toast Notification Helper (Material 3)
+let toastTimeout = null;
+
+function showToast(message, type = 'auto') {
     const toast = document.getElementById('toast');
     if (!toast) return;
-    toast.textContent = message;
-    toast.className = 'toast show' + (isError ? ' error' : ' success');
-    setTimeout(() => {
-        toast.className = 'toast';
-    }, 3500);
+
+    // Support legacy boolean argument (isError)
+    if (type === true) type = 'error';
+    if (type === false) type = 'auto';
+
+    // Auto-detect message severity if type is 'auto'
+    const lower = String(message).toLowerCase();
+    if (type === 'auto') {
+        if (lower.includes('offline') || lower.includes('tidak terdeteksi') || lower.includes('not detected') || lower.includes('tetapi i/o')) {
+            type = 'warning';
+        } else if (lower.includes('gagal') || lower.includes('error') || lower.includes('tidak ada') || lower.includes('failed')) {
+            type = 'error';
+        } else if (lower.includes('berhasil') || lower.includes('successfully') || lower.includes('selesai') || lower.includes('terkirim') || lower.includes('terdeteksi')) {
+            type = 'success';
+        } else {
+            type = 'info';
+        }
+    }
+
+    let icon = '⚡';
+    if (type === 'success') icon = '✅';
+    else if (type === 'warning') icon = '⚠️';
+    else if (type === 'error') icon = '❌';
+    else if (type === 'info') icon = 'ℹ️';
+
+    toast.innerHTML = `
+        <span class="m3-toast-icon noto-emoji">${icon}</span>
+        <span class="m3-toast-text">${message}</span>
+        <button type="button" class="m3-toast-close" onclick="hideToast()" aria-label="Tutup">✕</button>
+    `;
+
+    toast.className = `m3-snackbar toast show ${type}`;
+
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+        hideToast();
+    }, 4500);
+}
+
+function hideToast() {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.classList.remove('show');
+}
+
+// Scan Barcode from Image File (for Add/Edit Card Modal)
+function scanBarcodeForInput(fileInput, targetInputId) {
+    if (!fileInput.files || fileInput.files.length === 0) return;
+    const file = fileInput.files[0];
+    showToast('Memindai barcode dari gambar...', 'info');
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    fetch('/scan-barcode-image', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success && data.barcode) {
+            const target = document.getElementById(targetInputId);
+            if (target) {
+                target.value = data.barcode;
+                target.focus();
+            }
+            showToast('Barcode berhasil terdeteksi: [' + data.barcode + ']', 'success');
+        } else {
+            showToast(data.message || 'Tidak ada barcode yang terdeteksi pada gambar.', 'warning');
+        }
+    })
+    .catch(err => {
+        showToast('Gagal memproses gambar: ' + (err.message || err), 'error');
+    })
+    .finally(() => {
+        fileInput.value = '';
+    });
+}
+
+// Auto-scan barcode when picking card photo if barcode field is empty
+function autoScanFromCardPhoto(fileInput, targetInputId) {
+    if (!fileInput.files || fileInput.files.length === 0) return;
+    const target = document.getElementById(targetInputId);
+    if (target && target.value.trim() !== '') return; // Don't overwrite existing barcode
+
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+
+    fetch('/scan-barcode-image', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success && data.barcode) {
+            if (target) {
+                target.value = data.barcode;
+            }
+            showToast('Barcode otomatis terbaca dari foto kartu: [' + data.barcode + ']', 'success');
+        }
+    })
+    .catch(() => {});
 }
 
 // 1. Emulator Status Checker
