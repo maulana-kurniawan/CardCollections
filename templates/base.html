@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Card Collections{% endblock %} - Play! Emulator</title>
+    <!-- Google Fonts: Public Sans & Noto Color Emoji -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Noto+Color+Emoji&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="theme-{% block theme_name %}default{% endblock %}">
+    <header class="m3-app-bar">
+        <div class="m3-app-bar-container">
+            <a href="{{ url_for('index') }}" class="m3-brand">
+                <span class="m3-brand-icon noto-emoji">🎴</span>
+                <span class="m3-brand-title">Card<strong>Collections</strong></span>
+                <span class="m3-badge-version">v1.1</span>
+            </a>
+
+            <nav class="m3-nav-pills">
+                <a href="{{ url_for('index') }}" class="m3-nav-pill {% if request.path == '/' %}active{% endif %}">
+                    <span class="noto-emoji">📷</span>
+                    <span>Scan Barcode</span>
+                </a>
+                <a href="{{ url_for('collection_animal') }}" class="m3-nav-pill pill-animal {% if 'animal-card' in request.path %}active{% endif %}">
+                    <span class="noto-emoji">🦁</span>
+                    <span>Animal</span>
+                </a>
+                <a href="{{ url_for('collection_strong') }}" class="m3-nav-pill pill-strong {% if 'strong-card' in request.path %}active{% endif %}">
+                    <span class="noto-emoji">⚡</span>
+                    <span>Strong</span>
+                </a>
+                <a href="{{ url_for('collection_miracle') }}" class="m3-nav-pill pill-miracle {% if 'miracle-card' in request.path %}active{% endif %}">
+                    <span class="noto-emoji">🌟</span>
+                    <span>Miracle</span>
+                </a>
+            </nav>
+
+            <div class="m3-status-chip" id="statusPill" title="Status koneksi emulator Play!">
+                <span class="m3-status-dot" id="statusDot"></span>
+                <span class="m3-status-text" id="statusLabel">Cek Emulator...</span>
+                <button type="button" class="m3-btn-icon" id="btnCheckStatus" title="Refresh status koneksi">↻</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="m3-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Global Toast Notification -->
+    <div id="toast" class="m3-snackbar" role="alert"></div>
+
+    <footer class="m3-footer">
+        <div class="m3-footer-inner">
+            <p><strong>Card Collection 1.1</strong> &bull; Animal Kaiser Arcade Barcode I/O for <strong>Play! Emulator</strong></p>
+            <p class="m3-credit">Developed by <a href="https://github.com/maulana-kurniawan" target="_blank" rel="noopener"><strong>@maulana-kurniawan</strong></a> &bull; Material 3 Dark Edition</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

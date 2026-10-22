@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Scan Barcode{% endblock %}
+{% block theme_name %}default{% endblock %}
+
+{% block content %}
+<div class="scanner-page">
+    <div class="m3-hero">
+        <h1 class="m3-display-large">Pemindai Barcode Kartu</h1>
+        <p class="m3-body-large">Pindai barcode kartu fisik Animal Kaiser Anda dan tembakkan langsung ke emulator Play! via HTTP I/O.</p>
+    </div>
+
+    <div class="scanner-layout">
+        <!-- Camera Scanner Card -->
+        <div class="m3-card m3-card-elevated">
+            <div class="m3-card-header">
+                <div class="m3-card-title-group">
+                    <span class="card-icon noto-emoji">📷</span>
+                    <div>
+                        <h2>Kamera Scanner Real-time</h2>
+                        <p class="m3-card-subtitle">Deteksi barcode langsung dari webcam / smartphone</p>
+                    </div>
+                </div>
+                <div class="m3-btn-group">
+                    <button id="btnStartCamera" class="m3-btn m3-btn-primary">
+                        <span class="noto-emoji">📸</span> Buka Kamera
+                    </button>
+                    <button id="btnStopCamera" class="m3-btn m3-btn-outlined" style="display:none;">
+                        <span class="noto-emoji">⏹️</span> Tutup Kamera
+                    </button>
+                </div>
+            </div>
+
+            <div class="camera-stage" id="cameraViewport">
+                <video id="cameraVideo" playsinline autoplay muted></video>
+                <div class="scan-frame" id="scanOverlay">
+                    <div class="scan-laser-line"></div>
+                    <div class="corner c-tl"></div>
+                    <div class="corner c-tr"></div>
+                    <div class="corner c-bl"></div>
+                    <div class="corner c-br"></div>
+                </div>
+                <div class="camera-idle-view" id="cameraPlaceholder">
+                    <span class="idle-icon noto-emoji">🎥</span>
+                    <h3>Kamera Belum Aktif</h3>
+                    <p>Klik tombol <strong>"Buka Kamera"</strong> untuk memindai kartu fisik secara otomatis menggunakan sensor optik.</p>
+                </div>
+            </div>
+
+            <!-- Drag & Drop / File Upload -->
+            <div class="m3-dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+                <input type="file" id="fileInput" accept="image/*" style="display:none;">
+                <div class="dropzone-content">
+                    <span class="drop-icon noto-emoji">🖼️</span>
+                    <p><strong>Pilih atau Tarik Foto Kartu</strong> ke sini</p>
+                    <small>Mendukung format gambar JPEG, PNG, WEBP</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manual Input & Connection Info Card -->
+        <div class="m3-card m3-card-elevated">
+            <div class="m3-card-header">
+                <div class="m3-card-title-group">
+                    <span class="card-icon noto-emoji">⌨️</span>
+                    <div>
+                        <h2>Kirim Barcode Manual</h2>
+                        <p class="m3-card-subtitle">Masukkan kode angka/teks barcode secara presisi</p>
+                    </div>
+                </div>
+            </div>
+
+            <form id="manualBarcodeForm" class="m3-form">
+                <div class="m3-field">
+                    <label for="barcodeInput">Kode Barcode Kartu</label>
+                    <div class="m3-input-action-row">
+                        <input type="text" id="barcodeInput" name="barcode" class="m3-input font-mono" placeholder="Contoh: 1001-A-001" required autocomplete="off">
+                        <button type="submit" class="m3-btn m3-btn-filled" id="btnSendManual">
+                            <span class="noto-emoji">⚡</span> Kirim
+                        </button>
+                    </div>
+                    <span class="m3-helper-text">Barcode akan dikirimkan ke <code>http://&lt;IP&gt;:9876/sys147/barcode</code></span>
+                </div>
+            </form>
+
+            <div class="m3-divider"></div>
+
+            <div class="m3-info-panel">
+                <div class="panel-header">
+                    <span class="noto-emoji">📱</span>
+                    <h3>Akses Pemindai dari HP (WiFi)</h3>
+                </div>
+                <p>Buka browser Chrome / Safari di HP Anda yang berada dalam satu jaringan WiFi:</p>
+                <div class="m3-ip-badge-container">
+                    <span class="label">Alamat URL:</span>
+                    <code class="m3-ip-badge">http://{{ ip_add }}:5000</code>
+                </div>
+                <small class="m3-helper-text">Kamera smartphone Anda dapat langsung memindai kartu dan menginputnya ke emulator di PC.</small>
+            </div>
+
+            <div class="m3-divider"></div>
+
+            <div class="m3-info-panel">
+                <div class="panel-header">
+                    <span class="noto-emoji">🎮</span>
+                    <h3>Panduan Emulator Play! (Namco System 147)</h3>
+                </div>
+                <ol class="m3-step-list">
+                    <li>Buka emulator <strong>Play!</strong> dan mainkan ISO <strong>Animal Kaiser</strong>.</li>
+                    <li>Pastikan fitur <strong>I/O HTTP Server</strong> pada emulator dalam kondisi aktif (Port default <code>9876</code>).</li>
+                    <li>Status di pojok kanan atas akan berubah hijau (<strong>Play! Aktif</strong>).</li>
+                    <li>Saat game meminta scan kartu, tekan tombol <strong>"Gunakan Kartu"</strong> atau scan barcode fisik.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}Koleksi Kartu {{ type }}{% endblock %}
+{% block theme_name %}{{ type|lower }}{% endblock %}
+
+{% block content %}
+<div class="collection-page type-{{ type|lower }}">
+    <div class="m3-page-header">
+        <div class="header-titles">
+            <div class="m3-category-chip {{ type|lower }}">
+                {% if type == 'Animal' %}<span class="noto-emoji">🦁</span> ANIMAL CARD
+                {% elif type == 'Strong' %}<span class="noto-emoji">⚡</span> STRONG CARD
+                {% else %}<span class="noto-emoji">🌟</span> MIRACLE CARD{% endif %}
+            </div>
+            <h1 class="m3-display-medium">Koleksi Kartu <strong>{{ type }}</strong></h1>
+            <p class="m3-body-large">Katalog kartu {{ type }} Animal Kaiser untuk input instan ke emulator Play!.</p>
+        </div>
+
+        <div class="header-action-group">
+            <button class="m3-btn m3-btn-filled" onclick="openAddModal()">
+                <span class="noto-emoji">➕</span> Tambah Kartu
+            </button>
+        </div>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="m3-toolbar m3-card">
+        <div class="m3-segmented-tabs">
+            <a href="{{ url_for('collection_animal') }}" class="m3-tab-item tab-animal {% if type == 'Animal' %}active{% endif %}">
+                <span class="noto-emoji">🦁</span> Animal
+            </a>
+            <a href="{{ url_for('collection_strong') }}" class="m3-tab-item tab-strong {% if type == 'Strong' %}active{% endif %}">
+                <span class="noto-emoji">⚡</span> Strong
+            </a>
+            <a href="{{ url_for('collection_miracle') }}" class="m3-tab-item tab-miracle {% if type == 'Miracle' %}active{% endif %}">
+                <span class="noto-emoji">🌟</span> Miracle
+            </a>
+        </div>
+
+        <form action="" method="GET" class="m3-search-bar">
+            <div class="m3-search-box">
+                <span class="search-icon noto-emoji">🔍</span>
+                <input type="text" name="query" value="{{ query }}" placeholder="Cari nama kartu..." autocomplete="off">
+                {% if query %}
+                    <a href="?page=1" class="search-clear-btn" title="Hapus filter">✕</a>
+                {% endif %}
+            </div>
+            <button type="submit" class="m3-btn m3-btn-outlined">Cari</button>
+        </form>
+    </div>
+
+    <!-- Cards Grid (Vertical Rectangular TCG Card Proportions) -->
+    {% if collection and collection|length > 0 %}
+        <div class="m3-card-grid">
+            {% for card in collection %}
+            <div class="tcg-card" id="card-{{ card.id }}">
+                <div class="tcg-card-bezel">
+                    <!-- Vertical Card Media Box -->
+                    <div class="tcg-card-frame">
+                        {% if card.gambar %}
+                            <img src="{{ url_for('images', filename=card.gambar) }}" alt="{{ card.nama }}" class="tcg-card-img" loading="lazy">
+                        {% else %}
+                            <div class="tcg-placeholder-img">
+                                <span class="noto-emoji">🎴</span>
+                                <small>Foto Belum Diunggah</small>
+                            </div>
+                        {% endif %}
+
+                        <!-- Rarity Chip with Specific Palette -->
+                        {% set r_cls = card.rarity|lower|replace(' ', '-') %}
+                        <span class="m3-rarity-chip rarity-{{ r_cls }}">{{ card.rarity }}</span>
+                        
+                        <!-- Card Type Mini Badge -->
+                        <span class="tcg-type-indicator {{ card.type|lower }}">
+                            {% if card.type == 'Animal' %}🦁{% elif card.type == 'Strong' %}⚡{% else %}🌟{% endif %}
+                        </span>
+                    </div>
+
+                    <!-- Card Body & Details -->
+                    <div class="tcg-card-content">
+                        <h3 class="tcg-card-name" title="{{ card.nama }}">{{ card.nama }}</h3>
+                        
+                        <div class="tcg-barcode-badge font-mono">
+                            <span class="noto-emoji">🏷️</span>
+                            <code>{{ card.barcode }}</code>
+                        </div>
+
+                        <div class="tcg-actions">
+                            <button type="button" class="m3-btn m3-btn-filled m3-btn-block btn-trigger-card" onclick="sendCardBarcode('{{ card.barcode }}', '{{ card.nama }}')">
+                                <span class="noto-emoji">⚡</span> Gunakan Kartu
+                            </button>
+                            <div class="tcg-sub-actions">
+                                <button type="button" class="m3-btn m3-btn-tonal m3-btn-sm" onclick="openEditModal({{ card.id }})" title="Edit kartu">
+                                    <span class="noto-emoji">✏️</span> Edit
+                                </button>
+                                <button type="button" class="m3-btn m3-btn-danger m3-btn-sm" onclick="confirmDeleteCard({{ card.id }}, '{{ card.nama }}')" title="Hapus kartu">
+                                    <span class="noto-emoji">🗑️</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if total_pages > 1 %}
+        <div class="m3-pagination">
+            {% if current_page > 1 %}
+                <a href="?page={{ current_page - 1 }}{% if query %}&query={{ query }}{% endif %}" class="m3-page-btn prev">« Sebelumnya</a>
+            {% endif %}
+
+            <div class="m3-page-numbers">
+                {% for p in range(1, total_pages + 1) %}
+                    <a href="?page={{ p }}{% if query %}&query={{ query }}{% endif %}" class="m3-page-btn {% if p == current_page %}active{% endif %}">{{ p }}</a>
+                {% endfor %}
+            </div>
+
+            {% if current_page < total_pages %}
+                <a href="?page={{ current_page + 1 }}{% if query %}&query={{ query }}{% endif %}" class="m3-page-btn next">Selanjutnya »</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    {% else %}
+        <div class="m3-empty-state m3-card">
+            <span class="empty-icon noto-emoji">📭</span>
+            <h2>Tidak ada kartu {{ type }} ditemukan</h2>
+            <p>{% if query %}Tidak ada hasil untuk pencarian "<strong>{{ query }}</strong>"{% else %}Koleksi kartu {{ type }} Anda masih kosong.{% endif %}</p>
+            <button class="m3-btn m3-btn-filled" onclick="openAddModal()">
+                <span class="noto-emoji">➕</span> Tambah Kartu Sekarang
+            </button>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Modal Tambah Kartu -->
+<div id="addModal" class="m3-modal-backdrop">
+    <div class="m3-dialog">
+        <div class="m3-dialog-header">
+            <h2>Tambah Kartu {{ type }} Baru</h2>
+            <button class="m3-btn-icon" onclick="closeAddModal()">✕</button>
+        </div>
+        <form action="{{ url_for('tambah') }}" method="POST" enctype="multipart/form-data" class="m3-form">
+            <input type="hidden" name="type" value="{{ type }}">
+            
+            <div class="m3-field">
+                <label for="addNama">Nama Kartu *</label>
+                <input type="text" id="addNama" name="nama" class="m3-input" placeholder="Contoh: Lion, Master Blue, Meteor Crash..." required>
+            </div>
+
+            <div class="m3-field">
+                <label for="addRarity">Rarity Kartu *</label>
+                <select id="addRarity" name="rarity" class="m3-select" required>
+                    <option value="Normal">Normal</option>
+                    <option value="Bronze Rare">Bronze Rare</option>
+                    <option value="Silver Rare">Silver Rare</option>
+                    <option value="Gold Rare">Gold Rare</option>
+                    <option value="Ultra Rare">Ultra Rare</option>
+                </select>
+            </div>
+
+            <div class="m3-field">
+                <label for="addBarcode">Kode Barcode *</label>
+                <input type="text" id="addBarcode" name="barcode" class="m3-input font-mono" placeholder="Contoh: 1001-A-001" required>
+            </div>
+
+            <div class="m3-field">
+                <label for="addGambar">Foto Kartu Vertikal (Opsional)</label>
+                <input type="file" id="addGambar" name="gambar" class="m3-file-input" accept="image/*">
+            </div>
+
+            <div class="m3-dialog-actions">
+                <button type="button" class="m3-btn m3-btn-outlined" onclick="closeAddModal()">Batal</button>
+                <button type="submit" class="m3-btn m3-btn-filled">Simpan Kartu</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Edit Kartu -->
+<div id="editModal" class="m3-modal-backdrop">
+    <div class="m3-dialog">
+        <div class="m3-dialog-header">
+            <h2>Edit Kartu</h2>
+            <button class="m3-btn-icon" onclick="closeEditModal()">✕</button>
+        </div>
+        <form action="{{ url_for('edit') }}" method="POST" enctype="multipart/form-data" class="m3-form">
+            <input type="hidden" id="editId" name="id">
+            <input type="hidden" name="type" value="{{ type }}">
+
+            <div class="m3-field">
+                <label for="editNama">Nama Kartu *</label>
+                <input type="text" id="editNama" name="nama" class="m3-input" required>
+            </div>
+
+            <div class="m3-field">
+                <label for="editRarity">Rarity Kartu *</label>
+                <select id="editRarity" name="rarity" class="m3-select" required>
+                    <option value="Normal">Normal</option>
+                    <option value="Bronze Rare">Bronze Rare</option>
+                    <option value="Silver Rare">Silver Rare</option>
+                    <option value="Gold Rare">Gold Rare</option>
+                    <option value="Ultra Rare">Ultra Rare</option>
+                </select>
+            </div>
+
+            <div class="m3-field">
+                <label for="editBarcode">Kode Barcode *</label>
+                <input type="text" id="editBarcode" name="barcode" class="m3-input font-mono" required>
+            </div>
+
+            <div class="m3-field">
+                <label for="editGambar">Ganti Foto Kartu (Kosongkan jika tidak diganti)</label>
+                <input type="file" id="editGambar" name="gambar" class="m3-file-input" accept="image/*">
+            </div>
+
+            <div class="m3-dialog-actions">
+                <button type="button" class="m3-btn m3-btn-outlined" onclick="closeEditModal()">Batal</button>
+                <button type="submit" class="m3-btn m3-btn-filled">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
