@@ -22,10 +22,7 @@
                     </div>
                 </div>
                 <div class="m3-btn-group">
-                    <button id="btnStartCamera" class="m3-btn m3-btn-primary">
-                        <span class="noto-emoji">📸</span> Open Camera
-                    </button>
-                    <button id="btnStopCamera" class="m3-btn m3-btn-outlined" style="display:none;">
+                    <button type="button" id="btnStopCamera" class="m3-btn m3-btn-outlined" style="display:none;">
                         <span class="noto-emoji">⏹️</span> Close Camera
                     </button>
                 </div>
@@ -44,6 +41,9 @@
                     <span class="idle-icon noto-emoji">🎥</span>
                     <h3>Camera Inactive</h3>
                     <p>Click <strong>"Open Camera"</strong> to scan physical card barcodes automatically with your optical sensor.</p>
+                    <button type="button" id="btnStartCamera" class="m3-btn m3-btn-primary m3-btn-open-camera">
+                        <span class="noto-emoji">📸</span> Open Camera
+                    </button>
                 </div>
             </div>
 
