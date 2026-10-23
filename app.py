@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Card Collections v2.0 - Animal Kaiser Barcode Scanner & Collection Manager
+Card Collections v2.0.1 - Animal Kaiser Barcode Scanner & Collection Manager
 Author: maulana-kurniawan (https://github.com/maulana-kurniawan)
 Target Emulator: Play! (Namco System 147 I/O HTTP Server - Animal Kaiser)
 Vibe coded with Google Antigravity & Gemini 3.8 Flash
@@ -409,10 +409,10 @@ if __name__ == '__main__':
         faded_text = fade.greenblue(banner)
         print(faded_text)
     except Exception:
-        print("=== CARD COLLECTIONS 2.0 ===")
+        print("=== CARD COLLECTIONS 2.0.1 ===")
 
     colorama_init(autoreset=True)
-    print(f"* {Fore.LIGHTCYAN_EX}{Style.BRIGHT}Card Collection {Fore.WHITE}2.0{Style.RESET_ALL}")
+    print(f"* {Fore.LIGHTCYAN_EX}{Style.BRIGHT}Card Collection {Fore.WHITE}2.0.1{Style.RESET_ALL}")
 
     ip = get_ip_address()
     if ip and ip != '127.0.0.1':
@@ -440,7 +440,7 @@ if __name__ == '__main__':
             print("* Stopping server.")
     else:
         try:
-            webview.create_window('Card Collection 2.0 - by maulana-kurniawan', app, width=1280, height=800)
+            webview.create_window('Card Collection 2.0.1 - by maulana-kurniawan', app, width=1280, height=800)
             webview.start()
         except Exception as e:
             print(f"* Webview GUI notice: {e}. Running in web server mode.")

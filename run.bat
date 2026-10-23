@@ -1,7 +1,7 @@
 @echo off
-title Card Collection 2.0
+title Card Collection 2.0.1
 echo ===================================================
-echo Starting Card Collection 2.0 (Animal Kaiser & Play!)
+echo Starting Card Collection 2.0.1 (Animal Kaiser & Play!)
 echo ===================================================
 
 where python >nul 2>nul

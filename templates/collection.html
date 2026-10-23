@@ -211,17 +211,51 @@
             </div>
 
             <div class="m3-field">
-                <label for="addRarity">Card Rarity *</label>
-                <select id="addRarity" name="rarity" class="m3-select" required>
-                    <option value="Normal">Normal</option>
-                    <option value="Bronze Rare">Bronze Rare</option>
-                    <option value="Silver Rare">Silver Rare</option>
-                    <option value="Gold Rare">Gold Rare</option>
-                    {% if initial_add_type == 'Animal' %}
-                    <option value="Ultra Rare">Ultra Rare</option>
-                    <option value="Kaiser Rare">Kaiser Rare</option>
-                    {% endif %}
-                </select>
+                <label>Card Rarity *</label>
+                <div class="m3-chip-select-dropdown" id="addRarityDropdown">
+                    <input type="hidden" id="addRarity" name="rarity" value="Normal">
+                    <button type="button" class="m3-chip-dropdown-trigger rarity-normal" id="addRarityTrigger" onclick="toggleChipDropdown('add', 'Rarity')" aria-expanded="false">
+                        <span class="chip-trigger-content">
+                            <span class="chip-icon noto-emoji">⚪</span>
+                            <span class="chip-text">Normal</span>
+                        </span>
+                        <span class="chip-dropdown-arrow">▼</span>
+                    </button>
+                    <div class="m3-chip-dropdown-menu" id="addRarityMenu">
+                        <button type="button" class="m3-chip-dropdown-item rarity-normal selected" onclick="selectCardRarity('add', 'Normal')">
+                            <span class="noto-emoji">⚪</span>
+                            <span class="item-name">Normal</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        <button type="button" class="m3-chip-dropdown-item rarity-bronze-rare" onclick="selectCardRarity('add', 'Bronze Rare')">
+                            <span class="noto-emoji">🥉</span>
+                            <span class="item-name">Bronze Rare</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        <button type="button" class="m3-chip-dropdown-item rarity-silver-rare" onclick="selectCardRarity('add', 'Silver Rare')">
+                            <span class="noto-emoji">🥈</span>
+                            <span class="item-name">Silver Rare</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        <button type="button" class="m3-chip-dropdown-item rarity-gold-rare" onclick="selectCardRarity('add', 'Gold Rare')">
+                            <span class="noto-emoji">🥇</span>
+                            <span class="item-name">Gold Rare</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        {% if initial_add_type == 'Animal' %}
+                        <button type="button" class="m3-chip-dropdown-item rarity-ultra-rare" onclick="selectCardRarity('add', 'Ultra Rare')">
+                            <span class="noto-emoji">🌌</span>
+                            <span class="item-name">Ultra Rare</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        <button type="button" class="m3-chip-dropdown-item rarity-kaiser-rare" onclick="selectCardRarity('add', 'Kaiser Rare')">
+                            <span class="noto-emoji">👑</span>
+                            <span class="item-name">Kaiser Rare</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
 
             <div class="m3-field">
@@ -296,15 +330,49 @@
             </div>
 
             <div class="m3-field">
-                <label for="editRarity">Card Rarity *</label>
-                <select id="editRarity" name="rarity" class="m3-select" required>
-                    <option value="Normal">Normal</option>
-                    <option value="Bronze Rare">Bronze Rare</option>
-                    <option value="Silver Rare">Silver Rare</option>
-                    <option value="Gold Rare">Gold Rare</option>
-                    <option value="Ultra Rare">Ultra Rare</option>
-                    <option value="Kaiser Rare">Kaiser Rare</option>
-                </select>
+                <label>Card Rarity *</label>
+                <div class="m3-chip-select-dropdown" id="editRarityDropdown">
+                    <input type="hidden" id="editRarity" name="rarity" value="Normal">
+                    <button type="button" class="m3-chip-dropdown-trigger rarity-normal" id="editRarityTrigger" onclick="toggleChipDropdown('edit', 'Rarity')" aria-expanded="false">
+                        <span class="chip-trigger-content">
+                            <span class="chip-icon noto-emoji">⚪</span>
+                            <span class="chip-text">Normal</span>
+                        </span>
+                        <span class="chip-dropdown-arrow">▼</span>
+                    </button>
+                    <div class="m3-chip-dropdown-menu" id="editRarityMenu">
+                        <button type="button" class="m3-chip-dropdown-item rarity-normal selected" onclick="selectCardRarity('edit', 'Normal')">
+                            <span class="noto-emoji">⚪</span>
+                            <span class="item-name">Normal</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        <button type="button" class="m3-chip-dropdown-item rarity-bronze-rare" onclick="selectCardRarity('edit', 'Bronze Rare')">
+                            <span class="noto-emoji">🥉</span>
+                            <span class="item-name">Bronze Rare</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        <button type="button" class="m3-chip-dropdown-item rarity-silver-rare" onclick="selectCardRarity('edit', 'Silver Rare')">
+                            <span class="noto-emoji">🥈</span>
+                            <span class="item-name">Silver Rare</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        <button type="button" class="m3-chip-dropdown-item rarity-gold-rare" onclick="selectCardRarity('edit', 'Gold Rare')">
+                            <span class="noto-emoji">🥇</span>
+                            <span class="item-name">Gold Rare</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        <button type="button" class="m3-chip-dropdown-item rarity-ultra-rare" onclick="selectCardRarity('edit', 'Ultra Rare')">
+                            <span class="noto-emoji">🌌</span>
+                            <span class="item-name">Ultra Rare</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        <button type="button" class="m3-chip-dropdown-item rarity-kaiser-rare" onclick="selectCardRarity('edit', 'Kaiser Rare')">
+                            <span class="noto-emoji">👑</span>
+                            <span class="item-name">Kaiser Rare</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="m3-field">

@@ -69,7 +69,7 @@ jobs:
           tag_name: ${{ steps.release_info.outputs.tag }}
           name: ${{ steps.release_info.outputs.title }}
           body: |
-            ## 🎴 Card Collections v2.0 (Animal Kaiser Edition)
+            ## 🎴 Card Collections v2.0.1 (Animal Kaiser Edition)
             
             Automatically compiled by GitHub Actions from push commit [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}).
             

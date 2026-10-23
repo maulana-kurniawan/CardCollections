@@ -1,8 +1,8 @@
-﻿# Card Collection v2.0 (Animal Kaiser Edition)
+﻿# Card Collection v2.0.1 (Animal Kaiser Edition)
 
 A card management, barcode generation, and real-time scanning application for the arcade game **Animal Kaiser**, running on the **Play! PlayStation 2 / Namco System 147 Emulator**.
 
-- **Version:** v2.0
+- **Version:** v2.0.1
 - **Author / Maintainer:** [maulana-kurniawan](https://github.com/maulana-kurniawan)
 - **Credit & Original Source:** Built and redesigned upon the original [Card-Collections](https://github.com/Bebeq/Card-Collections) repository by **[Bebeq](https://github.com/Bebeq)**.
 - **Development:** *Vibe coded* with **Google Antigravity (Gemini 3.8 Flash)** ⚡

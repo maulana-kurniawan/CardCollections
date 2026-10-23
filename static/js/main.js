@@ -350,6 +350,15 @@ const CARD_TYPE_META = {
     Miracle: { label: 'Miracle', icon: '🌟', cssClass: 'chip-miracle' }
 };
 
+const RARITY_META = {
+    'Normal': { label: 'Normal', icon: '⚪', cssClass: 'rarity-normal' },
+    'Bronze Rare': { label: 'Bronze Rare', icon: '🥉', cssClass: 'rarity-bronze-rare' },
+    'Silver Rare': { label: 'Silver Rare', icon: '🥈', cssClass: 'rarity-silver-rare' },
+    'Gold Rare': { label: 'Gold Rare', icon: '🥇', cssClass: 'rarity-gold-rare' },
+    'Ultra Rare': { label: 'Ultra Rare', icon: '🌌', cssClass: 'rarity-ultra-rare' },
+    'Kaiser Rare': { label: 'Kaiser Rare', icon: '👑', cssClass: 'rarity-kaiser-rare' }
+};
+
 // Rarity Presets: Strong and Miracle have NO Ultra Rare or Kaiser Rare
 const RARITY_PRESETS = {
     Animal: [
@@ -374,9 +383,9 @@ const RARITY_PRESETS = {
     ]
 };
 
-function toggleChipDropdown(prefix) {
-    const dropdown = document.getElementById(prefix + 'TypeDropdown');
-    const trigger = document.getElementById(prefix + 'TypeTrigger');
+function toggleChipDropdown(prefix, target = 'Type') {
+    const dropdown = document.getElementById(prefix + target + 'Dropdown');
+    const trigger = document.getElementById(prefix + target + 'Trigger');
     if (!dropdown) return;
     const isCurrentlyOpen = dropdown.classList.contains('open');
 
@@ -436,12 +445,48 @@ function selectCardType(prefix, type, updateRarity = true) {
     }
 }
 
-function updateRarityOptions(prefix, selectedType, desiredRarity) {
-    const raritySelect = document.getElementById(prefix + 'Rarity');
-    if (!raritySelect) return;
+function selectCardRarity(prefix, rarity) {
+    const meta = RARITY_META[rarity] || RARITY_META['Normal'];
+    const rarityVal = meta.label;
 
+    // Update hidden input
+    const hiddenInput = document.getElementById(prefix + 'Rarity');
+    if (hiddenInput) {
+        hiddenInput.value = rarityVal;
+    }
+
+    // Update trigger button class, icon & text
+    const trigger = document.getElementById(prefix + 'RarityTrigger');
+    if (trigger) {
+        Object.values(RARITY_META).forEach(m => trigger.classList.remove(m.cssClass));
+        trigger.classList.add(meta.cssClass);
+        trigger.setAttribute('aria-expanded', 'false');
+        const iconEl = trigger.querySelector('.chip-icon');
+        const textEl = trigger.querySelector('.chip-text');
+        if (iconEl) iconEl.textContent = meta.icon;
+        if (textEl) textEl.textContent = meta.label;
+    }
+
+    // Update active highlight in menu items
+    const menu = document.getElementById(prefix + 'RarityMenu');
+    if (menu) {
+        const items = menu.querySelectorAll('.m3-chip-dropdown-item');
+        items.forEach(item => {
+            item.classList.toggle('selected', item.classList.contains(meta.cssClass));
+        });
+    }
+
+    // Close dropdown
+    const dropdown = document.getElementById(prefix + 'RarityDropdown');
+    if (dropdown) {
+        dropdown.classList.remove('open');
+    }
+}
+
+function updateRarityOptions(prefix, selectedType, desiredRarity) {
     const allowed = RARITY_PRESETS[selectedType] || RARITY_PRESETS.Animal;
-    const currentVal = desiredRarity !== undefined ? desiredRarity : raritySelect.value;
+    const hiddenInput = document.getElementById(prefix + 'Rarity');
+    const currentVal = desiredRarity !== undefined ? desiredRarity : (hiddenInput ? hiddenInput.value : 'Normal');
 
     // Fallback if previous selection was Ultra/Kaiser Rare and not allowed
     let targetVal = currentVal;
@@ -449,16 +494,54 @@ function updateRarityOptions(prefix, selectedType, desiredRarity) {
         targetVal = allowed.includes('Gold Rare') ? 'Gold Rare' : allowed[0];
     }
 
-    raritySelect.innerHTML = '';
-    allowed.forEach(r => {
-        const opt = document.createElement('option');
-        opt.value = r;
-        opt.textContent = r;
-        if (r === targetVal) {
-            opt.selected = true;
-        }
-        raritySelect.appendChild(opt);
-    });
+    // Update hidden input value
+    if (hiddenInput) {
+        hiddenInput.value = targetVal;
+    }
+
+    // Update trigger button
+    const targetMeta = RARITY_META[targetVal] || RARITY_META['Normal'];
+    const trigger = document.getElementById(prefix + 'RarityTrigger');
+    if (trigger) {
+        Object.values(RARITY_META).forEach(m => trigger.classList.remove(m.cssClass));
+        trigger.classList.add(targetMeta.cssClass);
+        const iconEl = trigger.querySelector('.chip-icon');
+        const textEl = trigger.querySelector('.chip-text');
+        if (iconEl) iconEl.textContent = targetMeta.icon;
+        if (textEl) textEl.textContent = targetMeta.label;
+    }
+
+    // Rebuild options in custom dropdown menu
+    const menu = document.getElementById(prefix + 'RarityMenu');
+    if (menu) {
+        menu.innerHTML = '';
+        allowed.forEach(r => {
+            const meta = RARITY_META[r] || RARITY_META['Normal'];
+            const isSelected = (r === targetVal);
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = `m3-chip-dropdown-item ${meta.cssClass} ${isSelected ? 'selected' : ''}`;
+            btn.onclick = () => selectCardRarity(prefix, r);
+
+            const iconSpan = document.createElement('span');
+            iconSpan.className = 'noto-emoji';
+            iconSpan.textContent = meta.icon;
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'item-name';
+            nameSpan.textContent = meta.label;
+
+            const badgeSpan = document.createElement('span');
+            badgeSpan.className = 'item-badge';
+            badgeSpan.textContent = '✓';
+
+            btn.appendChild(iconSpan);
+            btn.appendChild(nameSpan);
+            btn.appendChild(badgeSpan);
+            menu.appendChild(btn);
+        });
+    }
 }
 
 function openAddModal() {
@@ -478,8 +561,10 @@ function closeAddModal() {
     const modal = document.getElementById('addModal');
     if (modal) {
         modal.classList.remove('active');
-        const dropdown = document.getElementById('addTypeDropdown');
-        if (dropdown) dropdown.classList.remove('open');
+        const tDrop = document.getElementById('addTypeDropdown');
+        if (tDrop) tDrop.classList.remove('open');
+        const rDrop = document.getElementById('addRarityDropdown');
+        if (rDrop) rDrop.classList.remove('open');
     }
 }
 
@@ -510,8 +595,10 @@ function closeEditModal() {
     const modal = document.getElementById('editModal');
     if (modal) {
         modal.classList.remove('active');
-        const dropdown = document.getElementById('editTypeDropdown');
-        if (dropdown) dropdown.classList.remove('open');
+        const tDrop = document.getElementById('editTypeDropdown');
+        if (tDrop) tDrop.classList.remove('open');
+        const rDrop = document.getElementById('editRarityDropdown');
+        if (rDrop) rDrop.classList.remove('open');
     }
 }
 
