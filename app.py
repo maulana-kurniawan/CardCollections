@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Card Collections v2.0.3 - Animal Kaiser Barcode Scanner & Collection Manager
+Card Collections v2.1 - Animal Kaiser Barcode Scanner & Collection Manager
 Author: maulana-kurniawan (https://github.com/maulana-kurniawan)
 Target Emulator: Play! (Namco System 147 I/O HTTP Server - Animal Kaiser)
 Vibe coded with Google Antigravity & Gemini 3.8 Flash
@@ -102,12 +102,39 @@ def scan_barcode():
 
 
 TYPE_ORDER = {'animal': 0, 'strong': 1, 'miracle': 2}
+RARITY_ORDER = {
+    'kaiser rare': 0,
+    'kaiser': 0,
+    'ultra rare': 1,
+    'ultra': 1,
+    'gold rare': 2,
+    'gold': 2,
+    'silver rare': 3,
+    'silver': 3,
+    'bronze rare': 4,
+    'bronze': 4,
+    'normal': 5,
+}
+
+
+def get_type_rank(card_type):
+    """Rank card category: Animal > Strong > Miracle."""
+    if not card_type:
+        return 99
+    return TYPE_ORDER.get(str(card_type).strip().lower(), 99)
+
+
+def get_rarity_rank(rarity):
+    """Rank card rarity from rarest to most common: Kaiser > Ultra > Gold > Silver > Bronze > Normal."""
+    if not rarity:
+        return 99
+    return RARITY_ORDER.get(str(rarity).strip().lower(), 99)
 
 
 @app.route('/cards')
 @app.route('/collection')
 def cards():
-    """Card collection catalog with unified view & type filter."""
+    """Card collection catalog with unified view & type filter auto-sorted by type and rarity."""
     filter_type = request.args.get('type', 'All').strip()
     page = request.args.get('page', 1, type=int)
     query = request.args.get('query', '').strip()
@@ -122,12 +149,22 @@ def cards():
     # Apply type filter (All vs Animal vs Strong vs Miracle)
     if filter_type.lower() != 'all':
         filtered = [c for c in filtered if c.get('type', '').strip().lower() == filter_type.lower()]
-        filtered.sort(key=lambda c: -c.get('id', 0))
-    else:
-        # Default view combines all cards sorted by: Animal > Strong > Miracle, then newest first
+        # Auto-sort per category from rarest to most common, then newest ID
         filtered.sort(
             key=lambda c: (
-                TYPE_ORDER.get(c.get('type', '').strip().lower(), 99),
+                get_rarity_rank(c.get('rarity', '')),
+                -c.get('id', 0)
+            )
+        )
+    else:
+        # Default view combines all cards auto-sorted by:
+        # 1. Type: Animal > Strong > Miracle
+        # 2. Rarity: Kaiser Rare > Ultra Rare > Gold > Silver > Bronze > Normal
+        # 3. Newest card ID first
+        filtered.sort(
+            key=lambda c: (
+                get_type_rank(c.get('type', '')),
+                get_rarity_rank(c.get('rarity', '')),
                 -c.get('id', 0)
             )
         )
@@ -410,10 +447,10 @@ if __name__ == '__main__':
         faded_text = fade.greenblue(banner)
         print(faded_text)
     except Exception:
-        print("=== CARD COLLECTIONS 2.0.3 ===")
+        print("=== CARD COLLECTIONS 2.1 ===")
 
     colorama_init(autoreset=True)
-    print(f"* {Fore.LIGHTCYAN_EX}{Style.BRIGHT}Card Collection {Fore.WHITE}2.0.3{Style.RESET_ALL}")
+    print(f"* {Fore.LIGHTCYAN_EX}{Style.BRIGHT}Card Collection {Fore.WHITE}2.1{Style.RESET_ALL}")
 
     ip = get_ip_address()
     if ip and ip != '127.0.0.1':
@@ -441,7 +478,7 @@ if __name__ == '__main__':
             print("* Stopping server.")
     else:
         try:
-            webview.create_window('Card Collection 2.0.3 - by maulana-kurniawan', app, width=1280, height=800)
+            webview.create_window('Card Collection 2.1 - by maulana-kurniawan', app, width=1280, height=800)
             webview.start()
         except Exception as e:
             print(f"* Webview GUI notice: {e}. Running in web server mode.")

@@ -918,11 +918,44 @@ body {
     z-index: 2;
 }
 
-/* 1. Normal */
+/* 1. Normal: Color matches card type (Red for Animal, Green for Strong, Blue for Miracle) */
 .rarity-normal {
     background: #334155;
     color: #f8fafc;
     border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.m3-rarity-chip.rarity-normal.type-animal,
+.tcg-card.type-animal .m3-rarity-chip.rarity-normal,
+.m3-chip-dropdown-trigger.rarity-normal.type-animal,
+.m3-chip-dropdown-item.rarity-normal.type-animal {
+    background: var(--ak-animal-gradient) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 2px 10px var(--ak-animal-glow) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.m3-rarity-chip.rarity-normal.type-strong,
+.tcg-card.type-strong .m3-rarity-chip.rarity-normal,
+.m3-chip-dropdown-trigger.rarity-normal.type-strong,
+.m3-chip-dropdown-item.rarity-normal.type-strong {
+    background: var(--ak-strong-gradient) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 2px 10px var(--ak-strong-glow) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.m3-rarity-chip.rarity-normal.type-miracle,
+.tcg-card.type-miracle .m3-rarity-chip.rarity-normal,
+.m3-chip-dropdown-trigger.rarity-normal.type-miracle,
+.m3-chip-dropdown-item.rarity-normal.type-miracle {
+    background: var(--ak-miracle-gradient) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 2px 10px var(--ak-miracle-glow) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 /* 2. Bronze Rare */

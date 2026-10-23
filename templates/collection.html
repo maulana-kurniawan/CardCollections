@@ -30,9 +30,9 @@
             </h1>
             <p class="m3-body-large">
                 {% if filter_type == 'All' %}
-                    Complete Animal Kaiser card catalogue sorted by Animal, Strong, and Miracle.
+                    Complete Animal Kaiser card catalogue auto-sorted by Type (Animal &gt; Strong &gt; Miracle) and Rarity (Kaiser &gt; Ultra &gt; Gold &gt; Silver &gt; Bronze &gt; Normal).
                 {% else %}
-                    Catalogue of Animal Kaiser {{ filter_type }} cards with instant barcode trigger into Play! emulator.
+                    Catalogue of Animal Kaiser {{ filter_type }} cards auto-sorted by Rarity (Kaiser &gt; Ultra &gt; Gold &gt; Silver &gt; Bronze &gt; Normal).
                 {% endif %}
             </p>
         </div>
@@ -78,7 +78,7 @@
     {% if collection and collection|length > 0 %}
         <div class="m3-card-grid">
             {% for card in collection %}
-            <div class="tcg-card" id="card-{{ card.id }}">
+            <div class="tcg-card type-{{ card.type|lower }}" id="card-{{ card.id }}">
                 <div class="tcg-card-bezel">
                     <!-- Vertical Card Media Box -->
                     <div class="tcg-card-frame">
@@ -93,7 +93,7 @@
 
                         <!-- Rarity Chip -->
                         {% set r_cls = card.rarity|lower|replace(' ', '-') %}
-                        <span class="m3-rarity-chip rarity-{{ r_cls }}">{{ card.rarity }}</span>
+                        <span class="m3-rarity-chip rarity-{{ r_cls }} type-{{ card.type|lower }}">{{ card.rarity }}</span>
                         
                         <!-- Card Type Mini Badge -->
                         <span class="tcg-type-indicator {{ card.type|lower }}">
@@ -214,7 +214,7 @@
                 <label>Card Rarity *</label>
                 <div class="m3-chip-select-dropdown" id="addRarityDropdown">
                     <input type="hidden" id="addRarity" name="rarity" value="Normal">
-                    <button type="button" class="m3-chip-dropdown-trigger rarity-normal" id="addRarityTrigger" onclick="toggleChipDropdown('add', 'Rarity')" aria-expanded="false">
+                    <button type="button" class="m3-chip-dropdown-trigger rarity-normal type-animal" id="addRarityTrigger" onclick="toggleChipDropdown('add', 'Rarity')" aria-expanded="false">
                         <span class="chip-trigger-content">
                             <span class="chip-icon noto-emoji">⚪</span>
                             <span class="chip-text">Normal</span>
@@ -222,7 +222,7 @@
                         <span class="chip-dropdown-arrow">▼</span>
                     </button>
                     <div class="m3-chip-dropdown-menu" id="addRarityMenu">
-                        <button type="button" class="m3-chip-dropdown-item rarity-normal selected" onclick="selectCardRarity('add', 'Normal')">
+                        <button type="button" class="m3-chip-dropdown-item rarity-normal type-animal selected" onclick="selectCardRarity('add', 'Normal')">
                             <span class="noto-emoji">⚪</span>
                             <span class="item-name">Normal</span>
                             <span class="item-badge">✓</span>
@@ -333,7 +333,7 @@
                 <label>Card Rarity *</label>
                 <div class="m3-chip-select-dropdown" id="editRarityDropdown">
                     <input type="hidden" id="editRarity" name="rarity" value="Normal">
-                    <button type="button" class="m3-chip-dropdown-trigger rarity-normal" id="editRarityTrigger" onclick="toggleChipDropdown('edit', 'Rarity')" aria-expanded="false">
+                    <button type="button" class="m3-chip-dropdown-trigger rarity-normal type-animal" id="editRarityTrigger" onclick="toggleChipDropdown('edit', 'Rarity')" aria-expanded="false">
                         <span class="chip-trigger-content">
                             <span class="chip-icon noto-emoji">⚪</span>
                             <span class="chip-text">Normal</span>
@@ -341,7 +341,7 @@
                         <span class="chip-dropdown-arrow">▼</span>
                     </button>
                     <div class="m3-chip-dropdown-menu" id="editRarityMenu">
-                        <button type="button" class="m3-chip-dropdown-item rarity-normal selected" onclick="selectCardRarity('edit', 'Normal')">
+                        <button type="button" class="m3-chip-dropdown-item rarity-normal type-animal selected" onclick="selectCardRarity('edit', 'Normal')">
                             <span class="noto-emoji">⚪</span>
                             <span class="item-name">Normal</span>
                             <span class="item-badge">✓</span>

@@ -461,11 +461,19 @@ function selectCardRarity(prefix, rarity) {
         hiddenInput.value = rarityVal;
     }
 
+    // Get current card type
+    const typeInput = document.getElementById(prefix + 'Type');
+    const currentType = typeInput ? typeInput.value.toLowerCase() : 'animal';
+
     // Update trigger button class, icon & text
     const trigger = document.getElementById(prefix + 'RarityTrigger');
     if (trigger) {
         Object.values(RARITY_META).forEach(m => trigger.classList.remove(m.cssClass));
+        trigger.classList.remove('type-animal', 'type-strong', 'type-miracle');
         trigger.classList.add(meta.cssClass);
+        if (rarityVal === 'Normal') {
+            trigger.classList.add(`type-${currentType}`);
+        }
         trigger.setAttribute('aria-expanded', 'false');
         const iconEl = trigger.querySelector('.chip-icon');
         const textEl = trigger.querySelector('.chip-text');
@@ -491,6 +499,7 @@ function selectCardRarity(prefix, rarity) {
 
 function updateRarityOptions(prefix, selectedType, desiredRarity) {
     const allowed = RARITY_PRESETS[selectedType] || RARITY_PRESETS.Animal;
+    const typeCls = `type-${selectedType.toLowerCase()}`;
     const hiddenInput = document.getElementById(prefix + 'Rarity');
     const currentVal = desiredRarity !== undefined ? desiredRarity : (hiddenInput ? hiddenInput.value : 'Normal');
 
@@ -510,7 +519,11 @@ function updateRarityOptions(prefix, selectedType, desiredRarity) {
     const trigger = document.getElementById(prefix + 'RarityTrigger');
     if (trigger) {
         Object.values(RARITY_META).forEach(m => trigger.classList.remove(m.cssClass));
+        trigger.classList.remove('type-animal', 'type-strong', 'type-miracle');
         trigger.classList.add(targetMeta.cssClass);
+        if (targetVal === 'Normal') {
+            trigger.classList.add(typeCls);
+        }
         const iconEl = trigger.querySelector('.chip-icon');
         const textEl = trigger.querySelector('.chip-text');
         if (iconEl) iconEl.textContent = targetMeta.icon;
@@ -524,10 +537,11 @@ function updateRarityOptions(prefix, selectedType, desiredRarity) {
         allowed.forEach(r => {
             const meta = RARITY_META[r] || RARITY_META['Normal'];
             const isSelected = (r === targetVal);
+            const extraTypeCls = (r === 'Normal') ? ` ${typeCls}` : '';
 
             const btn = document.createElement('button');
             btn.type = 'button';
-            btn.className = `m3-chip-dropdown-item ${meta.cssClass} ${isSelected ? 'selected' : ''}`;
+            btn.className = `m3-chip-dropdown-item ${meta.cssClass}${extraTypeCls} ${isSelected ? 'selected' : ''}`;
             btn.onclick = () => selectCardRarity(prefix, r);
 
             const iconSpan = document.createElement('span');
