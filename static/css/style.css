@@ -720,6 +720,12 @@ body {
     background: rgba(255, 255, 255, 0.05);
 }
 
+.m3-tab-item.tab-all.active {
+    background: var(--md-sys-color-primary);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
 .m3-tab-item.tab-animal.active { background: var(--ak-animal-gradient); color: #fff; }
 .m3-tab-item.tab-strong.active { background: var(--ak-strong-gradient); color: #021a0a; }
 .m3-tab-item.tab-miracle.active { background: var(--ak-miracle-gradient); color: #fff; }
@@ -1014,6 +1020,14 @@ body {
 .tcg-sub-actions {
     display: flex;
     gap: 0.4rem;
+}
+
+.btn-delete-card {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.35rem !important;
+    font-weight: 700 !important;
 }
 
 .tcg-sub-actions .m3-btn {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,29 +19,22 @@
                 <span class="m3-badge-version">v1.1</span>
             </a>
 
+            <!-- Top Navbar Pills: Scan Barcode & Card List -->
             <nav class="m3-nav-pills">
-                <a href="{{ url_for('index') }}" class="m3-nav-pill {% if request.path == '/' %}active{% endif %}">
+                <a href="{{ url_for('index') }}" class="m3-nav-pill {% if request.path == '/' or request.endpoint == 'index' %}active{% endif %}">
                     <span class="noto-emoji">📷</span>
                     <span>Scan Barcode</span>
                 </a>
-                <a href="{{ url_for('collection_animal') }}" class="m3-nav-pill pill-animal {% if 'animal-card' in request.path %}active{% endif %}">
-                    <span class="noto-emoji">🦁</span>
-                    <span>Animal</span>
-                </a>
-                <a href="{{ url_for('collection_strong') }}" class="m3-nav-pill pill-strong {% if 'strong-card' in request.path %}active{% endif %}">
-                    <span class="noto-emoji">⚡</span>
-                    <span>Strong</span>
-                </a>
-                <a href="{{ url_for('collection_miracle') }}" class="m3-nav-pill pill-miracle {% if 'miracle-card' in request.path %}active{% endif %}">
-                    <span class="noto-emoji">🌟</span>
-                    <span>Miracle</span>
+                <a href="{{ url_for('cards') }}" class="m3-nav-pill {% if request.endpoint in ['cards', 'collection_animal', 'collection_strong', 'collection_miracle'] %}active{% endif %}">
+                    <span class="noto-emoji">🎴</span>
+                    <span>Card List</span>
                 </a>
             </nav>
 
-            <div class="m3-status-chip" id="statusPill" title="Status koneksi emulator Play!">
+            <div class="m3-status-chip" id="statusPill" title="Play! Emulator Connection Status">
                 <span class="m3-status-dot" id="statusDot"></span>
-                <span class="m3-status-text" id="statusLabel">Cek Emulator...</span>
-                <button type="button" class="m3-btn-icon" id="btnCheckStatus" title="Refresh status koneksi">↻</button>
+                <span class="m3-status-text" id="statusLabel">Checking Emulator...</span>
+                <button type="button" class="m3-btn-icon" id="btnCheckStatus" title="Refresh connection status">↻</button>
             </div>
         </div>
     </header>
@@ -55,7 +48,7 @@
 
     <footer class="m3-footer">
         <div class="m3-footer-inner">
-            <p><strong>Card Collection 1.1</strong> &bull; Animal Kaiser Arcade Barcode I/O for <strong>Play! Emulator</strong></p>
+            <p><strong>Card Collection v1.1</strong> &bull; Animal Kaiser Arcade Barcode I/O for <strong>Play! Emulator</strong></p>
             <p class="m3-credit">Developed by <a href="https://github.com/maulana-kurniawan" target="_blank" rel="noopener"><strong>@maulana-kurniawan</strong></a> &bull; Vibe coded with <strong>Antigravity (Gemini 3.8 Flash)</strong> ⚡</p>
         </div>
     </footer>

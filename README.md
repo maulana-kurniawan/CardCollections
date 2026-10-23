@@ -1,88 +1,90 @@
-# Card Collection (Animal Kaiser Edition)
+﻿# Card Collection (Animal Kaiser Edition)
 
-Aplikasi manajemen dan pemindai barcode kartu fisik untuk game arcade **Animal Kaiser** yang berjalan pada **Play! PlayStation 2 / Namco System 147 Emulator**.
+A card management, barcode generation, and real-time scanning application for the arcade game **Animal Kaiser**, running on the **Play! PlayStation 2 / Namco System 147 Emulator**.
 
 - **Author / Maintainer:** [maulana-kurniawan](https://github.com/maulana-kurniawan)
-- **Kredit & Sumber Asli:** Proyek ini dikembangkan dan ditingkatkan dari repositori asli [Card-Collections](https://github.com/Bebeq/Card-Collections) oleh **[Bebeq](https://github.com/Bebeq)**.
-- **Pengembangan:** *Vibe coded* menggunakan **Antigravity (Gemini 3.8 Flash)** ⚡
+- **Credit & Original Source:** Built and redesigned upon the original [Card-Collections](https://github.com/Bebeq/Card-Collections) repository by **[Bebeq](https://github.com/Bebeq)**.
+- **Development:** *Vibe coded* with **Google Antigravity (Gemini 3.8 Flash)** ⚡
 
 ---
 
-## Pembaruan & Perubahan dari Versi Asli Bebeq
+## What's New & Enhancements over the Original Version
 
-Berikut adalah perombakan fitur, antarmuka, dan perbaikan teknis yang dilakukan:
+1. **Streamlined Navigation & Unified Card Catalog:**
+   - Simplified top navigation bar with two core destinations: **Scan Barcode** and **Card List**.
+   - Default view displays **all cards unified together**, sorted by type hierarchy: **Animal > Strong > Miracle**, followed by newest entries.
+   - Interactive segmented filters (**All Cards**, **🦁 Animal**, **⚡ Strong**, **🌟 Miracle**) and live search bar.
 
-1. **Desain Antarmuka Material 3 Dark Theme:**
-   - Desain modern bernuansa gelap dengan aksen warna khas Animal Kaiser per kategori:
+2. **Material 3 Dark Theme Design System:**
+   - Sleek dark aesthetic featuring authentic Animal Kaiser category accent palettes:
      - 🔴 **Animal:** Kaiser Red (`#e61919`)
      - 🟢 **Strong:** Kaiser Emerald (`#00cc44`)
      - 🔵 **Miracle:** Cosmic Blue (`#0088ff`)
-   - Tipografi menggunakan Google Fonts **Public Sans** dan emoji open-source **Noto Color Emoji**.
+   - Premium typography using Google Fonts **Public Sans** and open-source **Noto Color Emoji**.
 
-2. **Visual Barcode 1D Asli (JsBarcode):**
-   - Menggantikan tampilan teks barcode biasa/emoji dengan **garis barcode 1D visual asli (SVG)** di setiap kartu koleksi, lengkap dengan kode teks di bawahnya.
+3. **Authentic 1D Visual Barcode Rendering (JsBarcode):**
+   - Renders genuine 1D barcode stripes (SVG format) for every card alongside the printed barcode text string, replacing plain text or emojis.
 
-3. **Sistem Chip Rarity & Rarity Baru:**
-   - Warna latar belakang chip rarity disesuaikan secara dinamis dengan nama rarity.
-   - **Ultra Rare:** Efek gradien khusus perpaduan **Biru, Ungu, dan Merah** (`linear-gradient`) disertai animasi kilau lembut.
-   - **Kaiser Rare (Baru):** Menambahkan tingkat rarity baru dengan gradasi mewah **Emas ke Silver / Abu metalik** dan animasi gleam.
+4. **Dynamic Rarity Chips & Supreme Tier:**
+   - Color-coded badges tailored to card rarity names (*Normal*, *Bronze Rare*, *Silver Rare*, *Gold Rare*).
+   - **Ultra Rare:** Signature **Blue, Purple, and Red** gradient (`linear-gradient`) with subtle shine animation.
+   - **Kaiser Rare (New Tier):** Luxurious **Gold, Silver, and Metallic Slate Gray** sheen with animated gleam.
 
-4. **Layout Kartu TCG Vertikal Presisi:**
-   - Kartu dirancang dengan proporsi vertikal arcade (~1:1.4) berbingkai bezel TCG, menggantikan layout persegi/tidak proporsional sebelumnya.
+5. **Precise Vertical TCG Card Proportions:**
+   - Standard arcade card vertical ratio (~1:1.4) with TCG protective borders, adaptive to 12 cards per page (4 columns × 3 rows).
 
-5. **Pemindai Barcode dari Berkas Gambar (Modal Input):**
-   - Menambahkan tombol **`[📷 Scan Gambar]`** pada form Tambah dan Edit kartu untuk membaca barcode dari foto/screenshot tanpa perlu mengetik manual.
-   - Deteksi otomatis: memilih foto kartu fisik secara cerdas akan mengecek dan mengisi kode barcode jika belum diisi.
+6. **Image-Based Barcode Scanner on Card Modals:**
+   - Dedicated **`[📷 Scan Image]`** tool on Add and Edit Card forms to extract barcodes automatically from photos or screenshots without manual typing.
+   - Smart card photo detection: uploading a card image will auto-populate the barcode field if left blank.
 
-6. **Notifikasi Material 3 Floating Toast / Snackbar:**
-   - Menggantikan pesan notifikasi polos menjadi toast melayang dengan *frosted glass* di tengah bawah layar.
-   - Deteksi status cerdas: menampilkan ikon dan warna peringatan amber `⚠️` saat Play! offline, hijau `✅` saat berhasil, dan merah `❌` saat gagal.
+7. **Material 3 Floating Toast / Snackbar:**
+   - Centered, frosted-glass floating notifications with intelligent status recognition (*amber warning* when Play! emulator is offline, *emerald green* upon successful dispatch, and *crimson red* on errors).
 
-7. **Perbaikan Kompilasi PyInstaller & Dependensi Windows C-DLL:**
-   - Mengatasi error crash `FileNotFoundError: Could not find module 'libiconv.dll'` pada Windows dengan membundel dependensi C-runtime `pyzbar` (`libiconv.dll`, `libzbar-64.dll`, `msvcr120.dll`) dan mengonfigurasi `os.add_dll_directory` secara tepat.
+8. **C-Runtime DLL Compatibility & One-Click Executable:**
+   - Fixed Windows C-library loading for `pyzbar` (`libiconv.dll`, `libzbar-64.dll`, `msvcr120.dll`) and automated PyInstaller build scripts.
 
 ---
 
-## Cara Menjalankan
+## How to Run
 
-### 1. Menjalankan Langsung (Python Source Code)
-Klik ganda `run.bat` atau jalankan via terminal:
+### 1. Run Directly from Python Source Code
+Double-click `run.bat` or run via terminal:
 ```bash
 pip install -r requirements.txt
 python app.py
 ```
-Untuk menjalankan dalam mode web murni tanpa jendela desktop:
+To run purely in web browser mode without the native desktop window:
 ```bash
 python app.py --no-gui
 ```
 
 ---
 
-## Cara Kompilasi Menjadi File `.exe` Mandiri
+## Compiling to Standalone `.exe`
 
-Anda dapat mengompilasi seluruh *source code* ini menjadi satu berkas biner mandiri `CardCollections.exe`:
+You can compile the entire application into a single portable binary `CardCollections.exe`:
 
-1. Klik ganda berkas **`build.bat`**
-2. Skrip akan otomatis memeriksa dependensi dan membangun program dengan PyInstaller
-3. Berkas eksekusi mandiri akan berada di:
+1. Double-click **`build.bat`**
+2. The script will automatically verify dependencies and compile with PyInstaller
+3. The executable output will be located at:
    ```text
    dist/
    └── CardCollections.exe
    ```
 
 > [!NOTE]
-> **Tentang `data.json` dan folder `images/`:**
-> Berkas hasil build tidak memerlukan `data.json` maupun folder `images/` bawaan. Folder `images/` dan berkas `data.json` akan otomatis dibuat (*auto-generated*) oleh aplikasi saat Anda menambahkan kartu koleksi pertama kali.
+> **About `data.json` and `images/` directory:**
+> The compiled binary is fully self-contained. The `data.json` database and `images/` folder will be auto-generated automatically when you add your first card through the user interface.
 
 ---
 
-## Unduhan Rilis Otomatis (GitHub Releases)
+## Automated GitHub Releases (CI/CD)
 
-Setiap ada **push commit** baru ke branch `main`, GitHub Actions akan otomatis mengompilasi dan menerbitkan biner mandiri terbaru pada tab **Releases**:
-- **`CardCollections.exe`**: Biner portabel mandiri siap pakai untuk Windows.
+Every **push commit** to the `main` branch automatically triggers GitHub Actions to compile and release the latest Windows binary under the **Releases** tab:
+- **`CardCollections.exe`**: Ready-to-use standalone executable for Windows.
 
 ---
 
-## Lisensi
+## License
 
-Proyek ini dilisensikan di bawah lisensi terbuka **[MIT License](LICENSE)** &copy; 2026 [maulana-kurniawan](https://github.com/maulana-kurniawan).
+This project is licensed under the **[MIT License](LICENSE)** &copy; 2026 [maulana-kurniawan](https://github.com/maulana-kurniawan).

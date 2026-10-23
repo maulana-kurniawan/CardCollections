@@ -101,88 +101,73 @@ def scan_barcode():
         return 'Internal Server Error', 500
 
 
-@app.route('/strong-card')
-def collection_strong():
-    type_name = 'Strong'
+TYPE_ORDER = {'animal': 0, 'strong': 1, 'miracle': 2}
+
+
+@app.route('/cards')
+@app.route('/collection')
+def cards():
+    """Card collection catalog with unified view & type filter."""
+    filter_type = request.args.get('type', 'All').strip()
     page = request.args.get('page', 1, type=int)
-    query = request.args.get('query', '')
-    animal_data = baca_data('data.json')
-    filtered_animals = [
-        animal for animal in animal_data
-        if animal.get('type') == type_name and query.lower() in animal.get('nama', '').lower()
-    ]
-    filtered_animals.reverse()
-    total_items = len(filtered_animals)
-    total_pages = total_items // CARDS_PER_PAGE + (1 if total_items % CARDS_PER_PAGE != 0 else 0)
+    query = request.args.get('query', '').strip()
+    all_cards = baca_data('data.json')
+
+    # Apply search query filter
+    if query:
+        filtered = [c for c in all_cards if query.lower() in c.get('nama', '').lower()]
+    else:
+        filtered = list(all_cards)
+
+    # Apply type filter (All vs Animal vs Strong vs Miracle)
+    if filter_type.lower() != 'all':
+        filtered = [c for c in filtered if c.get('type', '').strip().lower() == filter_type.lower()]
+        filtered.sort(key=lambda c: -c.get('id', 0))
+    else:
+        # Default view combines all cards sorted by: Animal > Strong > Miracle, then newest first
+        filtered.sort(
+            key=lambda c: (
+                TYPE_ORDER.get(c.get('type', '').strip().lower(), 99),
+                -c.get('id', 0)
+            )
+        )
+
+    total_items = len(filtered)
+    total_pages = (total_items + CARDS_PER_PAGE - 1) // CARDS_PER_PAGE or 1
     start_index = (page - 1) * CARDS_PER_PAGE
     end_index = start_index + CARDS_PER_PAGE
-    collection = filtered_animals[start_index:end_index]
+    collection = filtered[start_index:end_index]
+
     return render_template(
         'collection.html',
         collection=collection,
-        type=type_name,
+        filter_type=filter_type,
         total_pages=total_pages,
         current_page=page,
         query=query
     )
+
+
+@app.route('/animal-card')
+def collection_animal():
+    return redirect(url_for('cards', type='Animal', query=request.args.get('query', '')))
+
+
+@app.route('/strong-card')
+def collection_strong():
+    return redirect(url_for('cards', type='Strong', query=request.args.get('query', '')))
 
 
 @app.route('/miracle-card')
 def collection_miracle():
-    type_name = 'Miracle'
-    page = request.args.get('page', 1, type=int)
-    query = request.args.get('query', '')
-    animal_data = baca_data('data.json')
-    filtered_animals = [
-        animal for animal in animal_data
-        if animal.get('type') == type_name and query.lower() in animal.get('nama', '').lower()
-    ]
-    filtered_animals.reverse()
-    total_items = len(filtered_animals)
-    total_pages = total_items // CARDS_PER_PAGE + (1 if total_items % CARDS_PER_PAGE != 0 else 0)
-    start_index = (page - 1) * CARDS_PER_PAGE
-    end_index = start_index + CARDS_PER_PAGE
-    collection = filtered_animals[start_index:end_index]
-    return render_template(
-        'collection.html',
-        collection=collection,
-        type=type_name,
-        total_pages=total_pages,
-        current_page=page,
-        query=query
-    )
+    return redirect(url_for('cards', type='Miracle', query=request.args.get('query', '')))
+
 
 
 @app.route('/images/<path:filename>')
 def images(filename):
     """Serve card images from DATA_DIR/images."""
     return send_from_directory(IMAGES_DIR, filename)
-
-
-@app.route('/animal-card')
-def collection_animal():
-    type_name = 'Animal'
-    page = request.args.get('page', 1, type=int)
-    query = request.args.get('query', '')
-    animal_data = baca_data('data.json')
-    filtered_animals = [
-        animal for animal in animal_data
-        if animal.get('type') == type_name and query.lower() in animal.get('nama', '').lower()
-    ]
-    filtered_animals.reverse()
-    total_items = len(filtered_animals)
-    total_pages = total_items // CARDS_PER_PAGE + (1 if total_items % CARDS_PER_PAGE != 0 else 0)
-    start_index = (page - 1) * CARDS_PER_PAGE
-    end_index = start_index + CARDS_PER_PAGE
-    collection = filtered_animals[start_index:end_index]
-    return render_template(
-        'collection.html',
-        collection=collection,
-        type=type_name,
-        total_pages=total_pages,
-        current_page=page,
-        query=query
-    )
 
 
 @app.route('/tambah', methods=['POST'])
@@ -212,14 +197,8 @@ def tambah():
     product_data.append(new_animal)
     tulis_data_animal(product_data)
 
-    card_type = request.form.get('type')
-    if card_type == 'Animal':
-        return redirect(url_for('collection_animal'))
-    elif card_type == 'Strong':
-        return redirect(url_for('collection_strong'))
-    elif card_type == 'Miracle':
-        return redirect(url_for('collection_miracle'))
-    return redirect(url_for('index'))
+    card_type = request.form.get('type', 'All')
+    return redirect(url_for('cards', type=card_type))
 
 
 @app.route('/edit', methods=['POST'])
@@ -255,14 +234,8 @@ def edit():
 
     tulis_data_animal(animal_data)
 
-    card_type = request.form.get('type')
-    if card_type == 'Animal':
-        return redirect(url_for('collection_animal'))
-    elif card_type == 'Strong':
-        return redirect(url_for('collection_strong'))
-    elif card_type == 'Miracle':
-        return redirect(url_for('collection_miracle'))
-    return redirect(url_for('index'))
+    card_type = request.form.get('type', 'All')
+    return redirect(url_for('cards', type=card_type))
 
 
 @app.route('/hapus/<int:id>', methods=['POST'])
@@ -280,8 +253,8 @@ def hapus(id):
                     pass
         animal_data.remove(animal)
         tulis_data_animal(animal_data)
-        return jsonify({'message': 'Kartu berhasil dihapus'}), 200
-    return jsonify({'message': 'Kartu tidak ditemukan'}), 404
+        return jsonify({'message': 'Card successfully deleted'}), 200
+    return jsonify({'message': 'Card not found'}), 404
 
 
 @app.route('/baca/<int:id>', methods=['POST', 'GET'])
@@ -291,7 +264,7 @@ def baca(id):
     animal = next((a for a in animal_data if a.get('id') == id), None)
     if animal:
         return jsonify(animal)
-    return jsonify({'message': 'Kartu tidak ditemukan'}), 404
+    return jsonify({'message': 'Card not found'}), 404
 
 
 @app.route('/')
@@ -310,7 +283,7 @@ def connect():
             return 'Server Play! Active'
         return f'Server Play! status: {response.status_code}'
     except Exception:
-        return f'Barcode [{barcode}] terkirim ke antrean, tetapi I/O HTTP Server Play! offline.'
+        return f'Barcode [{barcode}] queued, but Play! I/O HTTP Server is offline.'
 
 
 @app.route('/upload', methods=['POST'])
@@ -318,7 +291,7 @@ def upload_file():
     """Upload barcode picture, decode, and send to Play! emulator."""
     try:
         if 'image' not in request.files:
-            return 'Tidak ada file gambar yang diunggah', 400
+            return 'No image file uploaded', 400
         image_file = request.files['image']
         image = Image.open(image_file)
         barcodes = decode(image)
@@ -333,11 +306,11 @@ def upload_file():
                     timeout=0.15
                 )
                 if response.status_code == 200:
-                    return f'Card Successfully sent! [{barcode_data}]'
+                    return f'Card successfully sent! [{barcode_data}]'
                 return f'Emulator response: {response.status_code}'
             except Exception:
-                return f'Barcode terdeteksi [{barcode_data}], tetapi I/O HTTP Server Play! offline.'
-        return 'Tidak ada barcode yang ditemukan'
+                return f'Barcode detected [{barcode_data}], but Play! I/O HTTP Server is offline.'
+        return 'No barcode found in image'
     except Exception as e:
         print('Error in /upload:', e)
         return 'Internal Server Error: ' + str(e), 500
@@ -349,24 +322,24 @@ def scan_barcode_image():
     """Decode barcode from uploaded image file and return extracted code as JSON."""
     try:
         if 'image' not in request.files:
-            return jsonify({'success': False, 'message': 'Tidak ada berkas gambar yang diunggah.'}), 400
+            return jsonify({'success': False, 'message': 'No image file uploaded.'}), 400
         image_file = request.files['image']
         image = Image.open(image_file)
         barcodes = decode(image)
         if barcodes:
             barcode_data = barcodes[0].data.decode('utf-8')
             return jsonify({'success': True, 'barcode': barcode_data})
-        return jsonify({'success': False, 'message': 'Tidak ada barcode yang terdeteksi pada gambar.'})
+        return jsonify({'success': False, 'message': 'No barcode detected in image.'})
     except Exception as e:
         print('Error in /scan-barcode-image:', e)
-        return jsonify({'success': False, 'message': f'Gagal memproses gambar: {str(e)}'}), 500
+        return jsonify({'success': False, 'message': f'Failed to process image: {str(e)}'}), 500
 
 @app.route('/send-barcode', methods=['POST'])
 def send_barcode():
     """Send text barcode to Play! emulator."""
     barcode = request.form.get('barcode', '')
     if not barcode:
-        return 'Barcode tidak boleh kosong', 400
+        return 'Barcode cannot be empty', 400
     try:
         target_ip = request.host.split(':')[0]
         response = requests.head(

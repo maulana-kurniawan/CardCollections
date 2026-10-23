@@ -22,11 +22,11 @@ function showToast(message, type = 'auto') {
     // Auto-detect message severity if type is 'auto'
     const lower = String(message).toLowerCase();
     if (type === 'auto') {
-        if (lower.includes('offline') || lower.includes('tidak terdeteksi') || lower.includes('not detected') || lower.includes('tetapi i/o')) {
+        if (lower.includes('offline') || lower.includes('not detected') || lower.includes('queued') || lower.includes('inactive') || lower.includes('tidak terdeteksi') || lower.includes('tetapi i/o')) {
             type = 'warning';
-        } else if (lower.includes('gagal') || lower.includes('error') || lower.includes('tidak ada') || lower.includes('failed')) {
+        } else if (lower.includes('fail') || lower.includes('error') || lower.includes('not found') || lower.includes('unable') || lower.includes('cannot') || lower.includes('gagal')) {
             type = 'error';
-        } else if (lower.includes('berhasil') || lower.includes('successfully') || lower.includes('selesai') || lower.includes('terkirim') || lower.includes('terdeteksi')) {
+        } else if (lower.includes('success') || lower.includes('sent') || lower.includes('detected') || lower.includes('deleted') || lower.includes('saved') || lower.includes('berhasil') || lower.includes('terdeteksi')) {
             type = 'success';
         } else {
             type = 'info';
@@ -63,7 +63,7 @@ function hideToast() {
 function scanBarcodeForInput(fileInput, targetInputId) {
     if (!fileInput.files || fileInput.files.length === 0) return;
     const file = fileInput.files[0];
-    showToast('Memindai barcode dari gambar...', 'info');
+    showToast('Scanning barcode from image...', 'info');
 
     const formData = new FormData();
     formData.append('image', file);
@@ -80,13 +80,13 @@ function scanBarcodeForInput(fileInput, targetInputId) {
                 target.value = data.barcode;
                 target.focus();
             }
-            showToast('Barcode berhasil terdeteksi: [' + data.barcode + ']', 'success');
+            showToast('Barcode successfully detected: [' + data.barcode + ']', 'success');
         } else {
-            showToast(data.message || 'Tidak ada barcode yang terdeteksi pada gambar.', 'warning');
+            showToast(data.message || 'No barcode detected in image.', 'warning');
         }
     })
     .catch(err => {
-        showToast('Gagal memproses gambar: ' + (err.message || err), 'error');
+        showToast('Failed to process image: ' + (err.message || err), 'error');
     })
     .finally(() => {
         fileInput.value = '';
@@ -113,7 +113,7 @@ function autoScanFromCardPhoto(fileInput, targetInputId) {
             if (target) {
                 target.value = data.barcode;
             }
-            showToast('Barcode otomatis terbaca dari foto kartu: [' + data.barcode + ']', 'success');
+            showToast('Barcode automatically detected from card photo: [' + data.barcode + ']', 'success');
         }
     })
     .catch(() => {});
@@ -125,13 +125,13 @@ function checkEmulatorStatus() {
     const statusLabel = document.getElementById('statusLabel');
     if (!statusDot || !statusLabel) return;
 
-    statusLabel.textContent = 'Mengecek...';
+    statusLabel.textContent = 'Checking...';
     fetch('/test-connect', { method: 'POST' })
         .then(res => res.text())
         .then(text => {
             if (text.includes('Active')) {
                 statusDot.className = 'status-dot online';
-                statusLabel.textContent = 'Play! Aktif';
+                statusLabel.textContent = 'Play! Active';
             } else {
                 statusDot.className = 'status-dot offline';
                 statusLabel.textContent = 'Play! Offline';
@@ -180,7 +180,7 @@ function initCameraScanner() {
             startFrameScanning(video);
         } catch (err) {
             console.error('Camera access error:', err);
-            showToast('Tidak dapat mengakses kamera: ' + err.message, true);
+            showToast('Unable to access camera: ' + err.message, 'error');
         }
     });
 
@@ -242,7 +242,7 @@ function startFrameScanning(video) {
             .then(barcode => {
                 isProcessing = false;
                 if (barcode && barcode.trim() !== '') {
-                    showToast('Barcode Terdeteksi: ' + barcode);
+                    showToast('Barcode detected: ' + barcode, 'info');
                     sendCardBarcode(barcode.trim(), 'Kartu Kamera');
                     // Brief pause to avoid duplicate scans
                     stopCamera();
@@ -287,7 +287,7 @@ function initDropzone() {
 }
 
 function handleFileUpload(file) {
-    showToast('Memindai barcode dari gambar...');
+    showToast('Scanning barcode from image...', 'info');
     const formData = new FormData();
     formData.append('image', file);
 
@@ -300,7 +300,7 @@ function handleFileUpload(file) {
         showToast(result);
     })
     .catch(err => {
-        showToast('Gagal memproses gambar: ' + err, true);
+        showToast('Failed to process image: ' + err, 'error');
     });
 }
 
@@ -320,7 +320,7 @@ function initManualBarcodeForm() {
 
 // 5. Send Barcode directly to Play! Emulator
 function sendCardBarcode(barcode, cardName = 'Kartu') {
-    showToast('Mengirim ' + barcode + ' ke emulator...');
+    showToast('Sending ' + barcode + ' to emulator...', 'info');
     const formData = new FormData();
     formData.append('barcode', barcode);
 
@@ -333,7 +333,7 @@ function sendCardBarcode(barcode, cardName = 'Kartu') {
         showToast(resText);
     })
     .catch(err => {
-        showToast('Koneksi emulator gagal: ' + err, true);
+        showToast('Emulator connection failed: ' + err, 'error');
     });
 }
 
@@ -356,13 +356,14 @@ function openEditModal(cardId) {
         .then(res => res.json())
         .then(card => {
             document.getElementById('editId').value = card.id;
+            if (document.getElementById('editType')) document.getElementById('editType').value = card.type;
             document.getElementById('editNama').value = card.nama;
             document.getElementById('editRarity').value = card.rarity;
             document.getElementById('editBarcode').value = card.barcode;
             modal.classList.add('active');
         })
         .catch(err => {
-            showToast('Gagal memuat detail kartu: ' + err, true);
+            showToast('Failed to load card details: ' + err, 'error');
         });
 }
 
@@ -372,16 +373,16 @@ function closeEditModal() {
 }
 
 function confirmDeleteCard(cardId, cardName) {
-    if (confirm('Apakah Anda yakin ingin menghapus kartu "' + cardName + '"?')) {
+    if (confirm('Are you sure you want to delete card "' + cardName + '"?')) {
         fetch('/hapus/' + cardId, { method: 'POST' })
             .then(res => res.json())
             .then(data => {
-                showToast(data.message || 'Kartu berhasil dihapus');
+                showToast(data.message || 'Card successfully deleted', 'success');
                 const cardEl = document.getElementById('card-' + cardId);
                 if (cardEl) cardEl.remove();
             })
             .catch(err => {
-                showToast('Gagal menghapus kartu: ' + err, true);
+                showToast('Failed to delete card: ' + err, 'error');
             });
     }
 }

@@ -71,12 +71,12 @@ jobs:
           body: |
             ## 🎴 Card Collections (Animal Kaiser Edition)
             
-            Otomatis dikompilasi oleh GitHub Actions dari commit push [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}).
+            Automatically compiled by GitHub Actions from push commit [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}).
             
-            ### 📦 Berkas Unduhan:
-            - **`CardCollections.exe`**: Biner mandiri (*standalone Windows executable*).
+            ### 📦 Download Assets:
+            - **`CardCollections.exe`**: Standalone Windows executable.
             
-            > **Catatan:** File `data.json` dan folder `images/` tidak disertakan karena akan dibuat otomatis (*auto-generated*) saat Anda pertama kali menambahkan kartu koleksi melalui antarmuka aplikasi.
+            > **Note:** The `data.json` database and `images/` folder are not bundled as they are auto-generated when you add cards through the application.
             
             ---
             *Author: [maulana-kurniawan](https://github.com/maulana-kurniawan) | Vibe coded with Antigravity (Gemini 3.8 Flash) ⚡ | Based on original project by [Bebeq](https://github.com/Bebeq/Card-Collections)*
