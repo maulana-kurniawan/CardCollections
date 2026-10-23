@@ -1,11 +1,9 @@
-﻿name: Build & Release Executable
+name: Build & Release Executable
 
 on:
   push:
     branches:
       - main
-    tags:
-      - 'v*'
   workflow_dispatch:
 
 permissions:
@@ -48,27 +46,11 @@ jobs:
           $size = (Get-Item "dist\CardCollections.exe").Length
           Write-Host "CardCollections.exe successfully generated! Size: $size bytes"
 
-      - name: Package Portable Distribution
-        shell: pwsh
-        run: |
-          # Create a clean release directory structure
-          New-Item -ItemType Directory -Path "release-dist" -Force | Out-Null
-          Copy-Item -Path "dist\CardCollections.exe" -Destination "release-dist\"
-          Copy-Item -Path "data.json" -Destination "release-dist\"
-          Copy-Item -Path "images" -Destination "release-dist\images" -Recurse
-          Copy-Item -Path "README.md" -Destination "release-dist\"
-
-          # Compress to portable zip
-          Compress-Archive -Path "release-dist\*" -DestinationPath "CardCollections-Windows-Portable.zip" -Force
-          Write-Host "CardCollections-Windows-Portable.zip created successfully."
-
       - name: Upload Artifact to GitHub Actions
         uses: actions/upload-artifact@v4
         with:
-          name: CardCollections-Windows-Build
-          path: |
-            CardCollections-Windows-Portable.zip
-            dist/CardCollections.exe
+          name: CardCollections-Windows
+          path: dist/CardCollections.exe
           retention-days: 30
 
       - name: Determine Release Tag and Title
@@ -76,18 +58,10 @@ jobs:
         shell: pwsh
         run: |
           $shortSha = $env:GITHUB_SHA.Substring(0, 7)
-          if ($env:GITHUB_REF -like "refs/tags/*") {
-            $tag = $env:GITHUB_REF_NAME
-            $title = "Card Collections $tag"
-            $isPrerelease = "false"
-          } else {
-            $tag = "build-$shortSha"
-            $title = "Card Collections Build #$env:GITHUB_RUN_NUMBER ($shortSha)"
-            $isPrerelease = "false"
-          }
+          $tag = "build-$shortSha"
+          $title = "Card Collections Build #$env:GITHUB_RUN_NUMBER ($shortSha)"
           "tag=$tag" >> $env:GITHUB_OUTPUT
           "title=$title" >> $env:GITHUB_OUTPUT
-          "prerelease=$isPrerelease" >> $env:GITHUB_OUTPUT
 
       - name: Publish to GitHub Releases
         uses: softprops/action-gh-release@v2
@@ -97,19 +71,19 @@ jobs:
           body: |
             ## 🎴 Card Collections (Animal Kaiser Edition)
             
-            Otomatis dikompilasi oleh GitHub Actions dari commit [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}).
+            Otomatis dikompilasi oleh GitHub Actions dari commit push [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}).
             
             ### 📦 Berkas Unduhan:
-            - **`CardCollections-Windows-Portable.zip`** *(Sangat Direkomendasikan)*: Paket lengkap portabel berisi `CardCollections.exe`, database `data.json`, dan folder aset `images/`. Tinggal unduh, ekstrak, dan jalankan!
-            - **`CardCollections.exe`**: File binary mandiri (*standalone executable*).
+            - **`CardCollections.exe`**: Biner mandiri (*standalone Windows executable*).
+            
+            > **Catatan:** File `data.json` dan folder `images/` tidak disertakan karena akan dibuat otomatis (*auto-generated*) saat Anda pertama kali menambahkan kartu koleksi melalui antarmuka aplikasi.
             
             ---
-            *Compiled on Windows Server with PyInstaller & Python 3.11*
+            *Author: [maulana-kurniawan](https://github.com/maulana-kurniawan) | Based on original project by [Bebeq](https://github.com/Bebeq/Card-Collections)*
           files: |
-            CardCollections-Windows-Portable.zip
             dist/CardCollections.exe
           draft: false
-          prerelease: ${{ steps.release_info.outputs.prerelease == 'true' }}
+          prerelease: false
           make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

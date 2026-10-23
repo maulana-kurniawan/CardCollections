@@ -2,30 +2,49 @@
 
 Aplikasi manajemen dan pemindai barcode kartu fisik untuk game arcade **Animal Kaiser** yang berjalan pada **Play! PlayStation 2 / Namco System 147 Emulator**.
 
-**Author:** [maulana-kurniawan](https://github.com/maulana-kurniawan)
+- **Author / Maintainer:** [maulana-kurniawan](https://github.com/maulana-kurniawan)
+- **Kredit & Sumber Asli:** Proyek ini dikembangkan dan ditingkatkan dari repositori asli [Card-Collections](https://github.com/Bebeq/Card-Collections) oleh **[Bebeq](https://github.com/Bebeq)**.
 
 ---
 
-## Fitur Utama
+## Pembaruan & Perubahan dari Versi Asli Bebeq
 
-- **UI Material 3 Dark Theme:** Desain modern dengan sistem warna khas Animal Kaiser (Merah untuk Animal, Hijau untuk Strong, Biru untuk Miracle).
-- **Rarity Chip Khusus:**
-  - *Normal:* Surface Slate
-  - *Bronze Rare:* Metallic Bronze
-  - *Silver Rare:* Chrome Metallic
-  - *Gold Rare:* Sparkle Gold
-  - *Ultra Rare:* **Gradien Biru, Ungu, dan Merah**
-  - *Kaiser Rare:* **Gradasi Emas, Silver, dan Abu Metalik**
-- **Layout Kartu Vertikal:** Proporsi kartu TCG arcade vertikal yang presisi (rasio ~1:1.4).
-- **Kamera Scanner Real-time:** Memindai barcode kartu langsung dari webcam PC atau browser smartphone via WiFi (`http://<IP_PC>:5000`).
-- **Koneksi Otomatis ke Play! Emulator:** Menembakkan barcode langsung ke port HTTP `9876/sys147/barcode`.
-- **Manajemen Kartu Lengkap:** Tambah, edit, hapus, dan cari kartu koleksi Anda.
+Berikut adalah perombakan fitur, antarmuka, dan perbaikan teknis yang dilakukan:
+
+1. **Desain Antarmuka Material 3 Dark Theme:**
+   - Desain modern bernuansa gelap dengan aksen warna khas Animal Kaiser per kategori:
+     - 🔴 **Animal:** Kaiser Red (`#e61919`)
+     - 🟢 **Strong:** Kaiser Emerald (`#00cc44`)
+     - 🔵 **Miracle:** Cosmic Blue (`#0088ff`)
+   - Tipografi menggunakan Google Fonts **Public Sans** dan emoji open-source **Noto Color Emoji**.
+
+2. **Visual Barcode 1D Asli (JsBarcode):**
+   - Menggantikan tampilan teks barcode biasa/emoji dengan **garis barcode 1D visual asli (SVG)** di setiap kartu koleksi, lengkap dengan kode teks di bawahnya.
+
+3. **Sistem Chip Rarity & Rarity Baru:**
+   - Warna latar belakang chip rarity disesuaikan secara dinamis dengan nama rarity.
+   - **Ultra Rare:** Efek gradien khusus perpaduan **Biru, Ungu, dan Merah** (`linear-gradient`) disertai animasi kilau lembut.
+   - **Kaiser Rare (Baru):** Menambahkan tingkat rarity baru dengan gradasi mewah **Emas ke Silver / Abu metalik** dan animasi gleam.
+
+4. **Layout Kartu TCG Vertikal Presisi:**
+   - Kartu dirancang dengan proporsi vertikal arcade (~1:1.4) berbingkai bezel TCG, menggantikan layout persegi/tidak proporsional sebelumnya.
+
+5. **Pemindai Barcode dari Berkas Gambar (Modal Input):**
+   - Menambahkan tombol **`[📷 Scan Gambar]`** pada form Tambah dan Edit kartu untuk membaca barcode dari foto/screenshot tanpa perlu mengetik manual.
+   - Deteksi otomatis: memilih foto kartu fisik secara cerdas akan mengecek dan mengisi kode barcode jika belum diisi.
+
+6. **Notifikasi Material 3 Floating Toast / Snackbar:**
+   - Menggantikan pesan notifikasi polos menjadi toast melayang dengan *frosted glass* di tengah bawah layar.
+   - Deteksi status cerdas: menampilkan ikon dan warna peringatan amber `⚠️` saat Play! offline, hijau `✅` saat berhasil, dan merah `❌` saat gagal.
+
+7. **Perbaikan Kompilasi PyInstaller & Dependensi Windows C-DLL:**
+   - Mengatasi error crash `FileNotFoundError: Could not find module 'libiconv.dll'` pada Windows dengan membundel dependensi C-runtime `pyzbar` (`libiconv.dll`, `libzbar-64.dll`, `msvcr120.dll`) dan mengonfigurasi `os.add_dll_directory` secara tepat.
 
 ---
 
 ## Cara Menjalankan
 
-### 1. Menjalankan Langsung (Python)
+### 1. Menjalankan Langsung (Python Source Code)
 Klik ganda `run.bat` atau jalankan via terminal:
 ```bash
 pip install -r requirements.txt
@@ -40,23 +59,23 @@ python app.py --no-gui
 
 ## Cara Kompilasi Menjadi File `.exe` Mandiri
 
-Anda dapat mengompilasi seluruh *source code* ini menjadi satu berkas `CardCollections.exe` (seperti biner aslinya):
+Anda dapat mengompilasi seluruh *source code* ini menjadi satu berkas biner mandiri `CardCollections.exe`:
 
 1. Klik ganda berkas **`build.bat`**
-2. Skrip akan otomatis menginstal PyInstaller dan membangun aplikasi ke folder `dist/`
-3. Berkas eksekusi portabel akan berada di:
+2. Skrip akan otomatis memeriksa dependensi dan membangun program dengan PyInstaller
+3. Berkas eksekusi mandiri akan berada di:
    ```text
    dist/
-   ├── CardCollections.exe
-   ├── data.json
-   └── images/
+   └── CardCollections.exe
    ```
 
+> [!NOTE]
+> **Tentang `data.json` dan folder `images/`:**
+> Berkas hasil build tidak memerlukan `data.json` maupun folder `images/` bawaan. Folder `images/` dan berkas `data.json` akan otomatis dibuat (*auto-generated*) oleh aplikasi saat Anda menambahkan kartu koleksi pertama kali.
 
 ---
 
 ## Unduhan Rilis Otomatis (GitHub Releases)
 
-Setiap ada *commit* atau *tag* baru yang di-push ke branch `main`, GitHub Actions akan otomatis mengompilasi biner Windows dan merilisnya pada tab **Releases**:
-- **`CardCollections-Windows-Portable.zip`** *(Direkomendasikan)*: Paket lengkap portabel (berisi `CardCollections.exe`, database `data.json`, dan folder aset `images/`).
-- **`CardCollections.exe`**: Berkas executable mandiri.
+Setiap ada **push commit** baru ke branch `main`, GitHub Actions akan otomatis mengompilasi dan menerbitkan biner mandiri terbaru pada tab **Releases**:
+- **`CardCollections.exe`**: Biner portabel mandiri siap pakai untuk Windows.
