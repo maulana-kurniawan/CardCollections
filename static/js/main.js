@@ -86,7 +86,7 @@ function scanBarcodeForInput(fileInput, targetInputId) {
                 target.value = data.barcode;
                 target.focus();
             }
-            showToast('Barcode successfully detected: [' + data.barcode + ']', 'success');
+            showToast('Barcode successfully detected', 'success');
         } else {
             showToast(data.message || 'No barcode detected in image.', 'warning');
         }
@@ -119,7 +119,7 @@ function autoScanFromCardPhoto(fileInput, targetInputId) {
             if (target) {
                 target.value = data.barcode;
             }
-            showToast('Barcode automatically detected from card photo: [' + data.barcode + ']', 'success');
+            showToast('Barcode automatically detected from card photo', 'success');
         }
     })
     .catch(() => {});
@@ -248,7 +248,7 @@ function startFrameScanning(video) {
             .then(barcode => {
                 isProcessing = false;
                 if (barcode && barcode.trim() !== '') {
-                    showToast('Barcode detected: ' + barcode, 'info');
+                    showToast('Barcode detected', 'info');
                     sendCardBarcode(barcode.trim(), 'Kartu Kamera');
                     // Brief pause to avoid duplicate scans
                     stopCamera();
@@ -325,21 +325,27 @@ function initManualBarcodeForm() {
 }
 
 // 5. Send Barcode directly to Play! Emulator
-function sendCardBarcode(barcode, cardName = 'Kartu') {
-    showToast('Sending ' + barcode + ' to emulator...', 'info');
+function sendCardBarcode(barcode, cardName = 'Card') {
+    const displayName = (cardName && cardName !== 'Kartu' && cardName !== 'Card') ? cardName : 'Card';
+    showToast('Sending ' + displayName + ' to emulator...', 'info');
     const formData = new FormData();
     formData.append('barcode', barcode);
+    formData.append('card_name', displayName);
 
     fetch('/send-barcode', {
         method: 'POST',
         body: formData
     })
-    .then(res => res.text())
-    .then(resText => {
-        showToast(resText);
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            showToast(data.message || (displayName + ' successfully sent'), 'success');
+        } else {
+            showToast(data.message || 'Play! I/O HTTP Server is offline.', 'warning');
+        }
     })
     .catch(err => {
-        showToast('Emulator connection failed: ' + err, 'error');
+        showToast('Emulator connection failed: ' + (err.message || err), 'error');
     });
 }
 

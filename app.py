@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Card Collections v2.0.1 - Animal Kaiser Barcode Scanner & Collection Manager
+Card Collections v2.0.2 - Animal Kaiser Barcode Scanner & Collection Manager
 Author: maulana-kurniawan (https://github.com/maulana-kurniawan)
 Target Emulator: Play! (Namco System 147 I/O HTTP Server - Animal Kaiser)
 Vibe coded with Google Antigravity & Gemini 3.8 Flash
@@ -331,10 +331,10 @@ def upload_file():
                     timeout=0.15
                 )
                 if response.status_code == 200:
-                    return f'Card successfully sent! [{barcode_data}]'
+                    return 'Card successfully sent'
                 return f'Emulator response: {response.status_code}'
             except Exception:
-                return f'Barcode detected [{barcode_data}], but Play! I/O HTTP Server is offline.'
+                return 'Barcode detected, but Play! I/O HTTP Server is offline.'
         return 'No barcode found in image'
     except Exception as e:
         print('Error in /upload:', e)
@@ -362,9 +362,10 @@ def scan_barcode_image():
 @app.route('/send-barcode', methods=['POST'])
 def send_barcode():
     """Send text barcode to Play! emulator."""
-    barcode = request.form.get('barcode', '')
+    barcode = request.form.get('barcode', '').strip()
+    card_name = request.form.get('card_name', 'Card').strip()
     if not barcode:
-        return 'Barcode cannot be empty', 400
+        return jsonify({'success': False, 'message': 'Barcode cannot be empty'}), 400
     try:
         target_ip = request.host.split(':')[0]
         response = requests.head(
@@ -373,10 +374,10 @@ def send_barcode():
             timeout=0.15
         )
         if response.status_code == 200:
-            return f'Card Successfully sent! [{barcode}]'
-        return f'Emulator response code: {response.status_code}'
+            return jsonify({'success': True, 'message': f'{card_name} successfully sent'})
+        return jsonify({'success': False, 'message': f'Emulator response code: {response.status_code}'})
     except Exception:
-        return 'I/O HTTP Server Play! not detected. '
+        return jsonify({'success': False, 'message': 'Play! I/O HTTP Server is offline.'})
 
 
 def get_ip_address():
@@ -409,10 +410,10 @@ if __name__ == '__main__':
         faded_text = fade.greenblue(banner)
         print(faded_text)
     except Exception:
-        print("=== CARD COLLECTIONS 2.0.1 ===")
+        print("=== CARD COLLECTIONS 2.0.2 ===")
 
     colorama_init(autoreset=True)
-    print(f"* {Fore.LIGHTCYAN_EX}{Style.BRIGHT}Card Collection {Fore.WHITE}2.0.1{Style.RESET_ALL}")
+    print(f"* {Fore.LIGHTCYAN_EX}{Style.BRIGHT}Card Collection {Fore.WHITE}2.0.2{Style.RESET_ALL}")
 
     ip = get_ip_address()
     if ip and ip != '127.0.0.1':
@@ -440,7 +441,7 @@ if __name__ == '__main__':
             print("* Stopping server.")
     else:
         try:
-            webview.create_window('Card Collection 2.0.1 - by maulana-kurniawan', app, width=1280, height=800)
+            webview.create_window('Card Collection 2.0.2 - by maulana-kurniawan', app, width=1280, height=800)
             webview.start()
         except Exception as e:
             print(f"* Webview GUI notice: {e}. Running in web server mode.")
