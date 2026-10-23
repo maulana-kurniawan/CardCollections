@@ -174,12 +174,35 @@
         </div>
         <form action="{{ url_for('tambah') }}" method="POST" enctype="multipart/form-data" class="m3-form">
             <div class="m3-field">
-                <label for="addType">Card Type *</label>
-                <select id="addType" name="type" class="m3-select" required>
-                    <option value="Animal" {% if filter_type == 'Animal' %}selected{% endif %}>🦁 Animal</option>
-                    <option value="Strong" {% if filter_type == 'Strong' %}selected{% endif %}>⚡ Strong</option>
-                    <option value="Miracle" {% if filter_type == 'Miracle' %}selected{% endif %}>🌟 Miracle</option>
-                </select>
+                <label>Card Type *</label>
+                {% set initial_add_type = filter_type if filter_type in ['Animal', 'Strong', 'Miracle'] else 'Animal' %}
+                <div class="m3-chip-select-dropdown" id="addTypeDropdown">
+                    <input type="hidden" id="addType" name="type" value="{{ initial_add_type }}">
+                    <button type="button" class="m3-chip-dropdown-trigger chip-{{ initial_add_type|lower }}" id="addTypeTrigger" onclick="toggleChipDropdown('add')" aria-expanded="false">
+                        <span class="chip-trigger-content">
+                            <span class="chip-icon noto-emoji">{% if initial_add_type == 'Animal' %}🦁{% elif initial_add_type == 'Strong' %}⚡{% else %}🌟{% endif %}</span>
+                            <span class="chip-text">{{ initial_add_type }}</span>
+                        </span>
+                        <span class="chip-dropdown-arrow">▼</span>
+                    </button>
+                    <div class="m3-chip-dropdown-menu" id="addTypeMenu">
+                        <button type="button" class="m3-chip-dropdown-item chip-animal {% if initial_add_type == 'Animal' %}selected{% endif %}" onclick="selectCardType('add', 'Animal')">
+                            <span class="noto-emoji">🦁</span>
+                            <span class="item-name">Animal</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        <button type="button" class="m3-chip-dropdown-item chip-strong {% if initial_add_type == 'Strong' %}selected{% endif %}" onclick="selectCardType('add', 'Strong')">
+                            <span class="noto-emoji">⚡</span>
+                            <span class="item-name">Strong</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        <button type="button" class="m3-chip-dropdown-item chip-miracle {% if initial_add_type == 'Miracle' %}selected{% endif %}" onclick="selectCardType('add', 'Miracle')">
+                            <span class="noto-emoji">🌟</span>
+                            <span class="item-name">Miracle</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="m3-field">
@@ -194,8 +217,10 @@
                     <option value="Bronze Rare">Bronze Rare</option>
                     <option value="Silver Rare">Silver Rare</option>
                     <option value="Gold Rare">Gold Rare</option>
+                    {% if initial_add_type == 'Animal' %}
                     <option value="Ultra Rare">Ultra Rare</option>
                     <option value="Kaiser Rare">Kaiser Rare</option>
+                    {% endif %}
                 </select>
             </div>
 
@@ -235,12 +260,34 @@
             <input type="hidden" id="editId" name="id">
 
             <div class="m3-field">
-                <label for="editType">Card Type *</label>
-                <select id="editType" name="type" class="m3-select" required>
-                    <option value="Animal">🦁 Animal</option>
-                    <option value="Strong">⚡ Strong</option>
-                    <option value="Miracle">🌟 Miracle</option>
-                </select>
+                <label>Card Type *</label>
+                <div class="m3-chip-select-dropdown" id="editTypeDropdown">
+                    <input type="hidden" id="editType" name="type" value="Animal">
+                    <button type="button" class="m3-chip-dropdown-trigger chip-animal" id="editTypeTrigger" onclick="toggleChipDropdown('edit')" aria-expanded="false">
+                        <span class="chip-trigger-content">
+                            <span class="chip-icon noto-emoji">🦁</span>
+                            <span class="chip-text">Animal</span>
+                        </span>
+                        <span class="chip-dropdown-arrow">▼</span>
+                    </button>
+                    <div class="m3-chip-dropdown-menu" id="editTypeMenu">
+                        <button type="button" class="m3-chip-dropdown-item chip-animal selected" onclick="selectCardType('edit', 'Animal')">
+                            <span class="noto-emoji">🦁</span>
+                            <span class="item-name">Animal</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        <button type="button" class="m3-chip-dropdown-item chip-strong" onclick="selectCardType('edit', 'Strong')">
+                            <span class="noto-emoji">⚡</span>
+                            <span class="item-name">Strong</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                        <button type="button" class="m3-chip-dropdown-item chip-miracle" onclick="selectCardType('edit', 'Miracle')">
+                            <span class="noto-emoji">🌟</span>
+                            <span class="item-name">Miracle</span>
+                            <span class="item-badge">✓</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="m3-field">

@@ -170,6 +170,21 @@ def images(filename):
     return send_from_directory(IMAGES_DIR, filename)
 
 
+VALID_RARITIES = {
+    'Animal': ['Normal', 'Bronze Rare', 'Silver Rare', 'Gold Rare', 'Ultra Rare', 'Kaiser Rare'],
+    'Strong': ['Normal', 'Bronze Rare', 'Silver Rare', 'Gold Rare'],
+    'Miracle': ['Normal', 'Bronze Rare', 'Silver Rare', 'Gold Rare']
+}
+
+
+def sanitize_card_rarity(card_type, card_rarity):
+    """Enforce rarity constraint: Strong & Miracle cards have NO Ultra Rare or Kaiser Rare."""
+    allowed = VALID_RARITIES.get(card_type, VALID_RARITIES['Animal'])
+    if card_rarity in allowed:
+        return card_rarity
+    return 'Gold Rare' if card_rarity in ('Ultra Rare', 'Kaiser Rare') else 'Normal'
+
+
 @app.route('/tambah', methods=['POST'])
 def tambah():
     """Add new card."""
@@ -179,12 +194,17 @@ def tambah():
     else:
         new_id = max(produk.get('id', 0) for produk in product_data) + 1
 
+    card_type = request.form.get('type', 'Animal').strip()
+    if card_type not in ('Animal', 'Strong', 'Miracle'):
+        card_type = 'Animal'
+    card_rarity = sanitize_card_rarity(card_type, request.form.get('rarity', 'Normal').strip())
+
     new_animal = {
         'id': new_id,
-        'nama': request.form.get('nama', ''),
-        'rarity': request.form.get('rarity', ''),
-        'type': request.form.get('type', ''),
-        'barcode': request.form.get('barcode', '')
+        'nama': request.form.get('nama', '').strip(),
+        'rarity': card_rarity,
+        'type': card_type,
+        'barcode': request.form.get('barcode', '').strip()
     }
 
     if 'gambar' in request.files:
@@ -210,10 +230,15 @@ def edit():
 
     for item in animal_data:
         if str(item.get('id')) == str(target_id):
-            item['nama'] = request.form.get('nama', item.get('nama'))
-            item['rarity'] = request.form.get('rarity', item.get('rarity'))
-            item['type'] = request.form.get('type', item.get('type'))
-            item['barcode'] = request.form.get('barcode', item.get('barcode'))
+            card_type = request.form.get('type', item.get('type', 'Animal')).strip()
+            if card_type not in ('Animal', 'Strong', 'Miracle'):
+                card_type = item.get('type', 'Animal')
+            card_rarity = sanitize_card_rarity(card_type, request.form.get('rarity', item.get('rarity', 'Normal')).strip())
+
+            item['nama'] = request.form.get('nama', item.get('nama')).strip()
+            item['rarity'] = card_rarity
+            item['type'] = card_type
+            item['barcode'] = request.form.get('barcode', item.get('barcode')).strip()
             item_to_update = item
             break
 

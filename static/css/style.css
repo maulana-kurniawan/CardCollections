@@ -1149,6 +1149,203 @@ body {
 }
 
 /* ==========================================================================
+   MATERIAL 3 CHIP SELECT DROPDOWN (Card Type Dropdown with Colored Chips)
+   ========================================================================== */
+.m3-chip-select-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.m3-chip-dropdown-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.15rem;
+    border-radius: var(--m3-shape-md);
+    border: 1.5px solid rgba(255, 255, 255, 0.16);
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    user-select: none;
+}
+
+.m3-chip-dropdown-trigger:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+.m3-chip-dropdown-trigger:focus-visible {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+}
+
+.chip-trigger-content {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.chip-trigger-content .chip-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.chip-dropdown-arrow {
+    font-size: 0.75rem;
+    opacity: 0.85;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.m3-chip-select-dropdown.open .chip-dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* Card Type Specific Trigger Styles */
+.m3-chip-dropdown-trigger.chip-animal {
+    background: var(--ak-animal-gradient);
+    color: #ffffff;
+    border-color: rgba(255, 120, 120, 0.35);
+    box-shadow: 0 4px 14px var(--ak-animal-glow);
+}
+
+.m3-chip-dropdown-trigger.chip-strong {
+    background: var(--ak-strong-gradient);
+    color: #021a0a;
+    border-color: rgba(120, 255, 170, 0.35);
+    box-shadow: 0 4px 14px var(--ak-strong-glow);
+}
+
+.m3-chip-dropdown-trigger.chip-miracle {
+    background: var(--ak-miracle-gradient);
+    color: #ffffff;
+    border-color: rgba(120, 190, 255, 0.35);
+    box-shadow: 0 4px 14px var(--ak-miracle-glow);
+}
+
+/* Dropdown Menu Container */
+.m3-chip-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: rgba(18, 24, 38, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: var(--m3-shape-md);
+    padding: 0.6rem;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    flex-direction: column;
+    gap: 0.5rem;
+    animation: chipMenuFadeIn 0.2s cubic-bezier(0, 0, 0.2, 1);
+}
+
+.m3-chip-select-dropdown.open .m3-chip-dropdown-menu {
+    display: flex;
+}
+
+@keyframes chipMenuFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Individual Colored Chip Options */
+.m3-chip-dropdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.7rem 1.15rem;
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    text-align: left;
+}
+
+.m3-chip-dropdown-item .noto-emoji {
+    font-size: 1.15rem;
+    margin-right: 0.6rem;
+}
+
+.m3-chip-dropdown-item .item-name {
+    flex: 1;
+}
+
+.m3-chip-dropdown-item .item-badge {
+    display: none;
+    font-weight: 900;
+    font-size: 1.05rem;
+    margin-left: 0.5rem;
+}
+
+.m3-chip-dropdown-item.selected .item-badge {
+    display: inline-block;
+}
+
+/* 1. Animal Chip Option */
+.m3-chip-dropdown-item.chip-animal {
+    background: var(--ak-animal-gradient);
+    color: #ffffff;
+}
+
+.m3-chip-dropdown-item.chip-animal:hover {
+    box-shadow: 0 4px 16px var(--ak-animal-glow);
+    transform: scale(1.015);
+}
+
+.m3-chip-dropdown-item.chip-animal.selected {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4), 0 4px 16px var(--ak-animal-glow);
+}
+
+/* 2. Strong Chip Option */
+.m3-chip-dropdown-item.chip-strong {
+    background: var(--ak-strong-gradient);
+    color: #021a0a;
+}
+
+.m3-chip-dropdown-item.chip-strong:hover {
+    box-shadow: 0 4px 16px var(--ak-strong-glow);
+    transform: scale(1.015);
+}
+
+.m3-chip-dropdown-item.chip-strong.selected {
+    border-color: #021a0a;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4), 0 4px 16px var(--ak-strong-glow);
+}
+
+/* 3. Miracle Chip Option */
+.m3-chip-dropdown-item.chip-miracle {
+    background: var(--ak-miracle-gradient);
+    color: #ffffff;
+}
+
+.m3-chip-dropdown-item.chip-miracle:hover {
+    box-shadow: 0 4px 16px var(--ak-miracle-glow);
+    transform: scale(1.015);
+}
+
+.m3-chip-dropdown-item.chip-miracle.selected {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4), 0 4px 16px var(--ak-miracle-glow);
+}
+
+
+/* ==========================================================================
    MATERIAL 3 SNACKBAR / TOAST NOTIFICATION
    ========================================================================== */
 #toast,

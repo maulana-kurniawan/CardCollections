@@ -6,6 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initDropzone();
     initManualBarcodeForm();
     renderVisualBarcodes();
+
+    // Initialize Add Card modal type & rarity
+    const addTypeInput = document.getElementById('addType');
+    if (addTypeInput) {
+        updateRarityOptions('add', addTypeInput.value || 'Animal');
+    }
 });
 
 // Global Toast Notification Helper (Material 3)
@@ -338,14 +344,143 @@ function sendCardBarcode(barcode, cardName = 'Kartu') {
 }
 
 // 6. Modal Functions (Add / Edit / Delete)
+const CARD_TYPE_META = {
+    Animal: { label: 'Animal', icon: '🦁', cssClass: 'chip-animal' },
+    Strong: { label: 'Strong', icon: '⚡', cssClass: 'chip-strong' },
+    Miracle: { label: 'Miracle', icon: '🌟', cssClass: 'chip-miracle' }
+};
+
+// Rarity Presets: Strong and Miracle have NO Ultra Rare or Kaiser Rare
+const RARITY_PRESETS = {
+    Animal: [
+        'Normal',
+        'Bronze Rare',
+        'Silver Rare',
+        'Gold Rare',
+        'Ultra Rare',
+        'Kaiser Rare'
+    ],
+    Strong: [
+        'Normal',
+        'Bronze Rare',
+        'Silver Rare',
+        'Gold Rare'
+    ],
+    Miracle: [
+        'Normal',
+        'Bronze Rare',
+        'Silver Rare',
+        'Gold Rare'
+    ]
+};
+
+function toggleChipDropdown(prefix) {
+    const dropdown = document.getElementById(prefix + 'TypeDropdown');
+    const trigger = document.getElementById(prefix + 'TypeTrigger');
+    if (!dropdown) return;
+    const isCurrentlyOpen = dropdown.classList.contains('open');
+
+    // Close any other open chip dropdowns first
+    document.querySelectorAll('.m3-chip-select-dropdown.open').forEach(d => {
+        if (d !== dropdown) {
+            d.classList.remove('open');
+            const otherTrigger = d.querySelector('.m3-chip-dropdown-trigger');
+            if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    dropdown.classList.toggle('open', !isCurrentlyOpen);
+    if (trigger) trigger.setAttribute('aria-expanded', !isCurrentlyOpen ? 'true' : 'false');
+}
+
+function selectCardType(prefix, type, updateRarity = true) {
+    const validTypes = ['Animal', 'Strong', 'Miracle'];
+    const cardType = validTypes.includes(type) ? type : 'Animal';
+    const meta = CARD_TYPE_META[cardType];
+
+    // Update hidden input
+    const hiddenInput = document.getElementById(prefix + 'Type');
+    if (hiddenInput) {
+        hiddenInput.value = cardType;
+    }
+
+    // Update trigger button class & text
+    const trigger = document.getElementById(prefix + 'TypeTrigger');
+    if (trigger) {
+        trigger.className = 'm3-chip-dropdown-trigger ' + meta.cssClass;
+        trigger.setAttribute('aria-expanded', 'false');
+        const iconEl = trigger.querySelector('.chip-icon');
+        const textEl = trigger.querySelector('.chip-text');
+        if (iconEl) iconEl.textContent = meta.icon;
+        if (textEl) textEl.textContent = meta.label;
+    }
+
+    // Update active highlight in menu items
+    const menu = document.getElementById(prefix + 'TypeMenu');
+    if (menu) {
+        const items = menu.querySelectorAll('.m3-chip-dropdown-item');
+        items.forEach(item => {
+            item.classList.toggle('selected', item.classList.contains(meta.cssClass));
+        });
+    }
+
+    // Close dropdown
+    const dropdown = document.getElementById(prefix + 'TypeDropdown');
+    if (dropdown) {
+        dropdown.classList.remove('open');
+    }
+
+    // Dynamically update rarity options (excludes Ultra/Kaiser for Strong & Miracle)
+    if (updateRarity) {
+        updateRarityOptions(prefix, cardType);
+    }
+}
+
+function updateRarityOptions(prefix, selectedType, desiredRarity) {
+    const raritySelect = document.getElementById(prefix + 'Rarity');
+    if (!raritySelect) return;
+
+    const allowed = RARITY_PRESETS[selectedType] || RARITY_PRESETS.Animal;
+    const currentVal = desiredRarity !== undefined ? desiredRarity : raritySelect.value;
+
+    // Fallback if previous selection was Ultra/Kaiser Rare and not allowed
+    let targetVal = currentVal;
+    if (!allowed.includes(targetVal)) {
+        targetVal = allowed.includes('Gold Rare') ? 'Gold Rare' : allowed[0];
+    }
+
+    raritySelect.innerHTML = '';
+    allowed.forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r;
+        opt.textContent = r;
+        if (r === targetVal) {
+            opt.selected = true;
+        }
+        raritySelect.appendChild(opt);
+    });
+}
+
 function openAddModal() {
     const modal = document.getElementById('addModal');
-    if (modal) modal.classList.add('active');
+    if (!modal) return;
+
+    // Sync card type chip & dynamic rarity
+    const hiddenType = document.getElementById('addType');
+    const initialType = (hiddenType && hiddenType.value) ? hiddenType.value : 'Animal';
+    selectCardType('add', initialType, false);
+    updateRarityOptions('add', initialType);
+
+    modal.classList.add('active');
 }
 
 function closeAddModal() {
     const modal = document.getElementById('addModal');
-    if (modal) modal.classList.remove('active');
+    if (modal) {
+        modal.classList.remove('active');
+        const dropdown = document.getElementById('addTypeDropdown');
+        if (dropdown) dropdown.classList.remove('open');
+    }
 }
 
 function openEditModal(cardId) {
@@ -356,10 +491,14 @@ function openEditModal(cardId) {
         .then(res => res.json())
         .then(card => {
             document.getElementById('editId').value = card.id;
-            if (document.getElementById('editType')) document.getElementById('editType').value = card.type;
             document.getElementById('editNama').value = card.nama;
-            document.getElementById('editRarity').value = card.rarity;
             document.getElementById('editBarcode').value = card.barcode;
+
+            // Sync Card Type chip dropdown & dynamic rarity options
+            const cardType = card.type || 'Animal';
+            selectCardType('edit', cardType, false);
+            updateRarityOptions('edit', cardType, card.rarity);
+
             modal.classList.add('active');
         })
         .catch(err => {
@@ -369,8 +508,33 @@ function openEditModal(cardId) {
 
 function closeEditModal() {
     const modal = document.getElementById('editModal');
-    if (modal) modal.classList.remove('active');
+    if (modal) {
+        modal.classList.remove('active');
+        const dropdown = document.getElementById('editTypeDropdown');
+        if (dropdown) dropdown.classList.remove('open');
+    }
 }
+
+// Close chip dropdowns on outside click or Escape key
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.m3-chip-select-dropdown')) {
+        document.querySelectorAll('.m3-chip-select-dropdown.open').forEach(d => {
+            d.classList.remove('open');
+            const trigger = d.querySelector('.m3-chip-dropdown-trigger');
+            if (trigger) trigger.setAttribute('aria-expanded', 'false');
+        });
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.m3-chip-select-dropdown.open').forEach(d => {
+            d.classList.remove('open');
+            const trigger = d.querySelector('.m3-chip-dropdown-trigger');
+            if (trigger) trigger.setAttribute('aria-expanded', 'false');
+        });
+    }
+});
 
 function confirmDeleteCard(cardId, cardName) {
     if (confirm('Are you sure you want to delete card "' + cardName + '"?')) {
