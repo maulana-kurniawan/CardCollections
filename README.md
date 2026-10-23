@@ -51,3 +51,12 @@ Anda dapat mengompilasi seluruh *source code* ini menjadi satu berkas `CardColle
    ├── data.json
    └── images/
    ```
+
+
+---
+
+## Unduhan Rilis Otomatis (GitHub Releases)
+
+Setiap ada *commit* atau *tag* baru yang di-push ke branch `main`, GitHub Actions akan otomatis mengompilasi biner Windows dan merilisnya pada tab **Releases**:
+- **`CardCollections-Windows-Portable.zip`** *(Direkomendasikan)*: Paket lengkap portabel (berisi `CardCollections.exe`, database `data.json`, dan folder aset `images/`).
+- **`CardCollections.exe`**: Berkas executable mandiri.
