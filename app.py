@@ -61,6 +61,7 @@ os.makedirs(IMAGES_DIR, exist_ok=True)
 
 app = Flask(__name__, static_folder=STATIC_DIR, template_folder=TEMPLATES_DIR)
 host = '127.0.0.1'
+CARDS_PER_PAGE = 10  # Layout 5 kolom x 2 baris per halaman
 
 
 def get_data_filepath(filename='data.json'):
@@ -112,9 +113,9 @@ def collection_strong():
     ]
     filtered_animals.reverse()
     total_items = len(filtered_animals)
-    total_pages = total_items // 6 + (1 if total_items % 6 != 0 else 0)
-    start_index = (page - 1) * 6
-    end_index = start_index + 6
+    total_pages = total_items // CARDS_PER_PAGE + (1 if total_items % CARDS_PER_PAGE != 0 else 0)
+    start_index = (page - 1) * CARDS_PER_PAGE
+    end_index = start_index + CARDS_PER_PAGE
     collection = filtered_animals[start_index:end_index]
     return render_template(
         'collection.html',
@@ -138,9 +139,9 @@ def collection_miracle():
     ]
     filtered_animals.reverse()
     total_items = len(filtered_animals)
-    total_pages = total_items // 6 + (1 if total_items % 6 != 0 else 0)
-    start_index = (page - 1) * 6
-    end_index = start_index + 6
+    total_pages = total_items // CARDS_PER_PAGE + (1 if total_items % CARDS_PER_PAGE != 0 else 0)
+    start_index = (page - 1) * CARDS_PER_PAGE
+    end_index = start_index + CARDS_PER_PAGE
     collection = filtered_animals[start_index:end_index]
     return render_template(
         'collection.html',
@@ -170,9 +171,9 @@ def collection_animal():
     ]
     filtered_animals.reverse()
     total_items = len(filtered_animals)
-    total_pages = total_items // 6 + (1 if total_items % 6 != 0 else 0)
-    start_index = (page - 1) * 6
-    end_index = start_index + 6
+    total_pages = total_items // CARDS_PER_PAGE + (1 if total_items % CARDS_PER_PAGE != 0 else 0)
+    start_index = (page - 1) * CARDS_PER_PAGE
+    end_index = start_index + CARDS_PER_PAGE
     collection = filtered_animals[start_index:end_index]
     return render_template(
         'collection.html',
@@ -441,7 +442,7 @@ if __name__ == '__main__':
             print("* Stopping server.")
     else:
         try:
-            webview.create_window('Card Collection 1.1 - by maulana-kurniawan', app, width=1200, height=680)
+            webview.create_window('Card Collection 1.1 - by maulana-kurniawan', app, width=1320, height=840)
             webview.start()
         except Exception as e:
             print(f"* Webview GUI notice: {e}. Running in web server mode.")
