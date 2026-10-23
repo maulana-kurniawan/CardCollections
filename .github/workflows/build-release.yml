@@ -79,7 +79,7 @@ jobs:
             > **Catatan:** File `data.json` dan folder `images/` tidak disertakan karena akan dibuat otomatis (*auto-generated*) saat Anda pertama kali menambahkan kartu koleksi melalui antarmuka aplikasi.
             
             ---
-            *Author: [maulana-kurniawan](https://github.com/maulana-kurniawan) | Based on original project by [Bebeq](https://github.com/Bebeq/Card-Collections)*
+            *Author: [maulana-kurniawan](https://github.com/maulana-kurniawan) | Vibe coded with Antigravity (Gemini 3.8 Flash) ⚡ | Based on original project by [Bebeq](https://github.com/Bebeq/Card-Collections)*
           files: |
             dist/CardCollections.exe
           draft: false

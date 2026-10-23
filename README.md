@@ -4,6 +4,7 @@ Aplikasi manajemen dan pemindai barcode kartu fisik untuk game arcade **Animal K
 
 - **Author / Maintainer:** [maulana-kurniawan](https://github.com/maulana-kurniawan)
 - **Kredit & Sumber Asli:** Proyek ini dikembangkan dan ditingkatkan dari repositori asli [Card-Collections](https://github.com/Bebeq/Card-Collections) oleh **[Bebeq](https://github.com/Bebeq)**.
+- **Pengembangan:** *Vibe coded* menggunakan **Antigravity (Gemini 3.8 Flash)** ⚡
 
 ---
 

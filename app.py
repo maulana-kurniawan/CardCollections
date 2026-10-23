@@ -3,6 +3,7 @@
 Card Collections v1.1 - Animal Kaiser Barcode Scanner & Collection Manager
 Author: maulana-kurniawan (https://github.com/maulana-kurniawan)
 Target Emulator: Play! (Namco System 147 I/O HTTP Server - Animal Kaiser)
+Vibe coded with Google Antigravity & Gemini 3.8 Flash
 """
 
 import sys
