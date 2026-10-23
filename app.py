@@ -61,7 +61,7 @@ os.makedirs(IMAGES_DIR, exist_ok=True)
 
 app = Flask(__name__, static_folder=STATIC_DIR, template_folder=TEMPLATES_DIR)
 host = '127.0.0.1'
-CARDS_PER_PAGE = 10  # Layout 5 kolom x 2 baris per halaman
+CARDS_PER_PAGE = 12  # Maksimal 12 kartu per halaman (4 kolom x 3 baris)
 
 
 def get_data_filepath(filename='data.json'):
@@ -442,7 +442,7 @@ if __name__ == '__main__':
             print("* Stopping server.")
     else:
         try:
-            webview.create_window('Card Collection 1.1 - by maulana-kurniawan', app, width=1320, height=840)
+            webview.create_window('Card Collection 1.1 - by maulana-kurniawan', app, width=1280, height=800)
             webview.start()
         except Exception as e:
             print(f"* Webview GUI notice: {e}. Running in web server mode.")

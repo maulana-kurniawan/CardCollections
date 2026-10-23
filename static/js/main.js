@@ -401,8 +401,8 @@ function renderVisualBarcodes() {
         try {
             JsBarcode(svg, code, {
                 format: "CODE128",
-                width: 1.3,
-                height: 32,
+                width: 1.38,
+                height: 36,
                 displayValue: false, // Text is rendered cleanly underneath
                 margin: 0,
                 background: "transparent",

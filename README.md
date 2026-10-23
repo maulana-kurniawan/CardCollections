@@ -80,3 +80,9 @@ Anda dapat mengompilasi seluruh *source code* ini menjadi satu berkas biner mand
 
 Setiap ada **push commit** baru ke branch `main`, GitHub Actions akan otomatis mengompilasi dan menerbitkan biner mandiri terbaru pada tab **Releases**:
 - **`CardCollections.exe`**: Biner portabel mandiri siap pakai untuk Windows.
+
+---
+
+## Lisensi
+
+Proyek ini dilisensikan di bawah lisensi terbuka **[MIT License](LICENSE)** &copy; 2026 [maulana-kurniawan](https://github.com/maulana-kurniawan).
